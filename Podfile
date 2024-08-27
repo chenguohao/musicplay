@@ -14,7 +14,8 @@ target 'MusicPlay' do
   pod 'ReactiveObjC', '~> 3.1.1'
   pod 'ReactiveSwift'
   pod 'SDWebImageSwiftUI'
-
+  pod 'AFNetworking', '~> 4.0'
+  pod 'Mantle'
 end
 post_install do |installer|
     installer.generated_projects.each do |project|

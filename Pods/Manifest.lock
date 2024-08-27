@@ -1,5 +1,23 @@
 PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
   - AliyunOSSiOS (2.10.22)
+  - Mantle (2.2.0):
+    - Mantle/extobjc (= 2.2.0)
+  - Mantle/extobjc (2.2.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - ReactiveObjC (3.1.1)
@@ -16,7 +34,9 @@ PODS:
   - TZImagePickerController/Location (3.8.6)
 
 DEPENDENCIES:
+  - AFNetworking (~> 4.0)
   - AliyunOSSiOS
+  - Mantle
   - Masonry
   - MBProgressHUD (~> 1.2.0)
   - ReactiveObjC (~> 3.1.1)
@@ -27,7 +47,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AFNetworking
     - AliyunOSSiOS
+    - Mantle
     - Masonry
     - MBProgressHUD
     - ReactiveObjC
@@ -37,7 +59,9 @@ SPEC REPOS:
     - TZImagePickerController
 
 SPEC CHECKSUMS:
+  AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   AliyunOSSiOS: b46648fd78909a567e3743fe94183748a407b175
+  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
@@ -46,6 +70,6 @@ SPEC CHECKSUMS:
   SDWebImageSwiftUI: dcff3d05fd0579ff280221ae8856c34ac3b67f25
   TZImagePickerController: a013c186415f6044914bb0d0dd960a884cff46ec
 
-PODFILE CHECKSUM: 3b51f4d618831eef885672bb89fa972c56cc66b8
+PODFILE CHECKSUM: ad161289911ce1434732c663a1ab9b0d9c50c754
 
 COCOAPODS: 1.15.2

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		46209C372C6B129100058334 /* MPPlaylistSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 46209C362C6B129100058334 /* MPPlaylistSectionHeader.m */; };
 		46209C392C6B15B800058334 /* playlist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46209C382C6B15B800058334 /* playlist.plist */; };
+		463180552C7C5925004D47DE /* MPAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 463180542C7C5925004D47DE /* MPAuthService.m */; };
+		463180572C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 in Resources */ = {isa = PBXBuildFile; fileRef = 463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */; };
 		463CC1542C6DEF2000993ABB /* MPPlaylistEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC1532C6DEF2000993ABB /* MPPlaylistEditViewController.m */; };
 		463CC1582C6E06CC00993ABB /* DNEHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC1572C6E06CC00993ABB /* DNEHUD.m */; };
 		463CC15F2C6E2CBF00993ABB /* MPAliOSSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC15E2C6E2CBF00993ABB /* MPAliOSSManager.m */; };
@@ -25,7 +27,12 @@
 		464E4B392C69F7440004AE4C /* songsData_musicapi.plist in Resources */ = {isa = PBXBuildFile; fileRef = 464E4B382C69F7440004AE4C /* songsData_musicapi.plist */; };
 		464E4B3C2C6A47A00004AE4C /* MPPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 464E4B3B2C6A47A00004AE4C /* MPPlayerViewController.m */; };
 		464E4B3F2C6A4A3F0004AE4C /* MPGlobalPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 464E4B3E2C6A4A3F0004AE4C /* MPGlobalPlayerManager.m */; };
+		465124312C79BC16005AB29D /* MPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 465124302C79BC16005AB29D /* MPLoginViewController.m */; };
+		465124342C79BD23005AB29D /* UIView+TapGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 465124332C79BD23005AB29D /* UIView+TapGesture.m */; };
+		465124372C79C01F005AB29D /* MPUIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 465124362C79C01F005AB29D /* MPUIManager.m */; };
 		46572CA32C66161000EC61CD /* MPMusicPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 46572CA22C66161000EC61CD /* MPMusicPlayer.m */; };
+		469812A92C7DC422003C0821 /* MPProfileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 469812A82C7DC422003C0821 /* MPProfileManager.m */; };
+		469812AC2C7DC4B2003C0821 /* MPUserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 469812AB2C7DC4B2003C0821 /* MPUserProfile.m */; };
 		46A4EE9B2C72F3AF0021A3B1 /* MPMusicPlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4EE9A2C72F3AF0021A3B1 /* MPMusicPlayControl.swift */; };
 		46A689DD2C671182000A7033 /* MPMusicSearchWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A689DC2C671182000A7033 /* MPMusicSearchWrapper.m */; };
 		46A689E12C6718F0000A7033 /* MPMusicCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A689E02C6718F0000A7033 /* MPMusicCacheManager.m */; };
@@ -40,6 +47,9 @@
 		46209C352C6B129100058334 /* MPPlaylistSectionHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlaylistSectionHeader.h; sourceTree = "<group>"; };
 		46209C362C6B129100058334 /* MPPlaylistSectionHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlaylistSectionHeader.m; sourceTree = "<group>"; };
 		46209C382C6B15B800058334 /* playlist.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = playlist.plist; sourceTree = "<group>"; };
+		463180532C7C5925004D47DE /* MPAuthService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPAuthService.h; sourceTree = "<group>"; };
+		463180542C7C5925004D47DE /* MPAuthService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPAuthService.m; sourceTree = "<group>"; };
+		463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AuthKey_9TA7FWK494.p8; sourceTree = "<group>"; };
 		463CC1522C6DEF2000993ABB /* MPPlaylistEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlaylistEditViewController.h; sourceTree = "<group>"; };
 		463CC1532C6DEF2000993ABB /* MPPlaylistEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlaylistEditViewController.m; sourceTree = "<group>"; };
 		463CC1562C6E06CC00993ABB /* DNEHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNEHUD.h; sourceTree = "<group>"; };
@@ -70,8 +80,19 @@
 		464E4B3B2C6A47A00004AE4C /* MPPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlayerViewController.m; sourceTree = "<group>"; };
 		464E4B3D2C6A4A3F0004AE4C /* MPGlobalPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPGlobalPlayerManager.h; sourceTree = "<group>"; };
 		464E4B3E2C6A4A3F0004AE4C /* MPGlobalPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPGlobalPlayerManager.m; sourceTree = "<group>"; };
+		4651242F2C79BC16005AB29D /* MPLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPLoginViewController.h; sourceTree = "<group>"; };
+		465124302C79BC16005AB29D /* MPLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPLoginViewController.m; sourceTree = "<group>"; };
+		465124322C79BD23005AB29D /* UIView+TapGesture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+TapGesture.h"; sourceTree = "<group>"; };
+		465124332C79BD23005AB29D /* UIView+TapGesture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+TapGesture.m"; sourceTree = "<group>"; };
+		465124352C79C01F005AB29D /* MPUIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUIManager.h; sourceTree = "<group>"; };
+		465124362C79C01F005AB29D /* MPUIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUIManager.m; sourceTree = "<group>"; };
+		465124382C79C417005AB29D /* MusicPlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MusicPlay.entitlements; sourceTree = "<group>"; };
 		46572CA12C66161000EC61CD /* MPMusicPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPMusicPlayer.h; sourceTree = "<group>"; };
 		46572CA22C66161000EC61CD /* MPMusicPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPMusicPlayer.m; sourceTree = "<group>"; };
+		469812A72C7DC422003C0821 /* MPProfileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPProfileManager.h; sourceTree = "<group>"; };
+		469812A82C7DC422003C0821 /* MPProfileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPProfileManager.m; sourceTree = "<group>"; };
+		469812AA2C7DC4B2003C0821 /* MPUserProfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUserProfile.h; sourceTree = "<group>"; };
+		469812AB2C7DC4B2003C0821 /* MPUserProfile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPUserProfile.m; sourceTree = "<group>"; };
 		46A4EE9A2C72F3AF0021A3B1 /* MPMusicPlayControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPMusicPlayControl.swift; sourceTree = "<group>"; };
 		46A689DB2C671182000A7033 /* MPMusicSearchWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPMusicSearchWrapper.h; sourceTree = "<group>"; };
 		46A689DC2C671182000A7033 /* MPMusicSearchWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPMusicSearchWrapper.m; sourceTree = "<group>"; };
@@ -140,6 +161,8 @@
 			children = (
 				463CC1562C6E06CC00993ABB /* DNEHUD.h */,
 				463CC1572C6E06CC00993ABB /* DNEHUD.m */,
+				465124322C79BD23005AB29D /* UIView+TapGesture.h */,
+				465124332C79BD23005AB29D /* UIView+TapGesture.m */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -174,6 +197,8 @@
 		4647F1672C64EAFA002CCBE3 /* MusicPlay */ = {
 			isa = PBXGroup;
 			children = (
+				465124382C79C417005AB29D /* MusicPlay.entitlements */,
+				4651242E2C79BC03005AB29D /* Auth */,
 				463CC1552C6E06C200993ABB /* CommonUI */,
 				463CC1512C6DEEEC00993ABB /* Edit */,
 				46B55BC82C6DDBE1006241D9 /* Service */,
@@ -197,8 +222,26 @@
 				46209C382C6B15B800058334 /* playlist.plist */,
 				46DBEB102C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.h */,
 				46DBEB112C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m */,
+				465124352C79C01F005AB29D /* MPUIManager.h */,
+				465124362C79C01F005AB29D /* MPUIManager.m */,
 			);
 			path = MusicPlay;
+			sourceTree = "<group>";
+		};
+		4651242E2C79BC03005AB29D /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				4651242F2C79BC16005AB29D /* MPLoginViewController.h */,
+				465124302C79BC16005AB29D /* MPLoginViewController.m */,
+				463180532C7C5925004D47DE /* MPAuthService.h */,
+				463180542C7C5925004D47DE /* MPAuthService.m */,
+				463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */,
+				469812A72C7DC422003C0821 /* MPProfileManager.h */,
+				469812A82C7DC422003C0821 /* MPProfileManager.m */,
+				469812AA2C7DC4B2003C0821 /* MPUserProfile.h */,
+				469812AB2C7DC4B2003C0821 /* MPUserProfile.m */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		46572CA02C6615F300EC61CD /* Player */ = {
@@ -322,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46A689E32C6719B3000A7033 /* songsData_itunes.plist in Resources */,
+				463180572C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 in Resources */,
 				464E4B392C69F7440004AE4C /* songsData_musicapi.plist in Resources */,
 				4647F1752C64EAFB002CCBE3 /* Assets.xcassets in Resources */,
 				4647F1782C64EAFB002CCBE3 /* Base in Resources */,
@@ -387,18 +431,24 @@
 				463CC15F2C6E2CBF00993ABB /* MPAliOSSManager.m in Sources */,
 				464E4B372C69E90C0004AE4C /* MusicKitWrapper.swift in Sources */,
 				4647F1832C64FE19002CCBE3 /* MPPlayDetailListViewController.m in Sources */,
+				463180552C7C5925004D47DE /* MPAuthService.m in Sources */,
+				469812A92C7DC422003C0821 /* MPProfileManager.m in Sources */,
 				4647F1892C64FEBD002CCBE3 /* MPPlayDetailListCell.m in Sources */,
+				469812AC2C7DC4B2003C0821 /* MPUserProfile.m in Sources */,
 				4647F1862C64FE56002CCBE3 /* MPPlayDetailHeaderView.m in Sources */,
 				46A689DD2C671182000A7033 /* MPMusicSearchWrapper.m in Sources */,
 				4647F17B2C64EAFB002CCBE3 /* main.m in Sources */,
 				46209C372C6B129100058334 /* MPPlaylistSectionHeader.m in Sources */,
 				46DBEB122C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m in Sources */,
+				465124312C79BC16005AB29D /* MPLoginViewController.m in Sources */,
 				46DBEB0F2C6CE3E3001E5DB8 /* MPPlayerListViewController.m in Sources */,
 				463CC1582C6E06CC00993ABB /* DNEHUD.m in Sources */,
 				46A689E12C6718F0000A7033 /* MPMusicCacheManager.m in Sources */,
 				46572CA32C66161000EC61CD /* MPMusicPlayer.m in Sources */,
 				463CC1542C6DEF2000993ABB /* MPPlaylistEditViewController.m in Sources */,
 				4647F16D2C64EAFA002CCBE3 /* SceneDelegate.m in Sources */,
+				465124372C79C01F005AB29D /* MPUIManager.m in Sources */,
+				465124342C79BD23005AB29D /* UIView+TapGesture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +589,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MusicPlay/MusicPlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 525KY2226B;
@@ -578,6 +629,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MusicPlay/MusicPlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 525KY2226B;

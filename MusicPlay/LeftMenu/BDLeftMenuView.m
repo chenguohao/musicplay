@@ -5,10 +5,15 @@
 //  Created by VictorZhang on 2020/4/19.
 //  Copyright © 2020 TelaBytes. All rights reserved.
 //
-
+#import "DNEHUD.h"
 #import "BDLeftMenuView.h"
 #import "Masonry.h"
 #import "SDWebImage/SDWebImage.h"
+#import "UIView+TapGesture.h"
+#import "MPUIManager.h"
+#import "MPProfileManager.h"
+#import "ReactiveObjC/ReactiveObjC.h"
+#import "MPUserProfile.h"
 #define UIScreenBounds          [UIScreen mainScreen].bounds
 #define BDLeftMenuViewMaxWidth  UIScreenBounds.size.width * 0.70  // 左侧白色菜单的宽度
 #define AnimationDuration       0.25
@@ -37,6 +42,8 @@ static BDLeftMenuView *_leftMenuView = nil;
 @property (nonatomic, strong) UIImageView* profileAvatar;
 @property (nonatomic, strong) UILabel* profileName;
 
+
+
 @end
 
 @implementation BDLeftMenuView
@@ -45,8 +52,32 @@ static BDLeftMenuView *_leftMenuView = nil;
     self = [super init];
     if (self) {
         [self setupViews];
+        
+        @weakify(self);
+        [RACObserve([MPProfileManager sharedManager], curUser) subscribeNext:^(MPUserProfile *newUser) {
+                @strongify(self);
+                if (newUser) {
+                    // 更新头像
+                    [self loadCurUser:newUser];
+                }else{
+                    [self setUserDefault];
+                }
+            }];
     }
+    if([MPProfileManager sharedManager].curUser){
+        [self loadCurUser:[MPProfileManager sharedManager].curUser];
+    }else{
+        [self setUserDefault];
+    }
+   
     return self;
+}
+
+- (void)loadCurUser:(MPUserProfile*)user{
+    self.profileName.text = user.name;
+    if(user.avatar.length){
+        [self.profileAvatar sd_setImageWithURL:[NSURL URLWithString:user.avatar]];
+    }
 }
 
 + (BDLeftMenuView *)getInstanceView {
@@ -242,6 +273,11 @@ static BDLeftMenuView *_leftMenuView = nil;
     self.profileName.text = @"Tap to Login";
 }
 
+- (void)setUserDefault{
+    self.profileAvatar.image = [UIImage imageNamed:@"avatar_default"];
+    self.profileName.text = @"Tap to Login";
+}
+
 // 修改菜单列表的数据  比如：切换语言时，或者新增，或者删除列表项时
 - (void)changeMenuDataList:(NSArray *)menuDataList {
     _menuDataList = menuDataList;
@@ -304,9 +340,16 @@ static BDLeftMenuView *_leftMenuView = nil;
 //        _profileHeader.backgroundColor = UIColor.redColor;
         [_profileHeader addSubview:self.profileName];
         [_profileHeader addSubview:self.profileAvatar];
+        
+        __weak typeof(self) wkSelf = self;
+        [_profileHeader addTapGestureWithBlock:^{
+            [wkSelf onLogin];
+        }];
     }
     return _profileHeader;;
 }
+
+
 
 -(UILabel *)profileName{
     if(_profileName == nil){
@@ -362,11 +405,38 @@ static BDLeftMenuView *_leftMenuView = nil;
     if (indexPath.section == 0) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kBDLeftMenuViewEventNotification object:nil userInfo:@{@"isUserHeader":@(YES), @"data":self.userInfo}];
         [self didCloseLeftMenu];
+        switch (indexPath.row) {
+            case 0:
+                 
+                break;
+            case 1:
+                 
+                break;
+            case 2:
+                 
+                break;
+            case 3:
+                [self onLogout];
+                break;
+            default:
+                break;
+        }
     } else if (indexPath.section == 1) {
         NSDictionary *dict = [self.menuDataList objectAtIndex:indexPath.row];
         [[NSNotificationCenter defaultCenter] postNotificationName:kBDLeftMenuViewEventNotification object:nil userInfo:@{@"isUserHeader":@(NO), @"data":dict}];
         [self didCloseLeftMenu];
     }
+}
+
+#pragma mark - Function
+- (void)onLogin{
+    [[MPUIManager sharedManager] showLogin];
+}
+
+- (void)onLogout{
+    [MPProfileManager sharedManager].curUser = nil;
+    [[MPProfileManager sharedManager] removeUserCache];
+    [DNEHUD showMessage:@"Logout Success"];
 }
 
 @end
