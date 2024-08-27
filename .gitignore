@@ -1,3 +1,5 @@
 MusicPlay/.DS_Store
 Pods
 Pods
+*.xcbkptlist
+*.xcuserstate
