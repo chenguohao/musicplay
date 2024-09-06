@@ -44,12 +44,16 @@
     return self;
 }
 
-- (void)showPlayer{
+- (void)showPlayer:(UIView*)view{
     dispatch_async(dispatch_get_main_queue(), ^{
-         
-        AppDelegate  *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//        [[UIApplication sharedApplication].keyWindow addSubview:[GJFloatPlayerManager shareInstance].playerView];
-        [[UIApplication sharedApplication].keyWindow addSubview:self.playerViewController.view];
+        if(view){
+            [view addSubview:self.playerViewController.view];
+        }else{
+            AppDelegate  *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    //        [[UIApplication sharedApplication].keyWindow addSubview:[GJFloatPlayerManager shareInstance].playerView];
+            [[UIApplication sharedApplication].keyWindow addSubview:self.playerViewController.view];
+        }
+       
 //        [[UIApplication sharedApplication].keyWindow.view insertSubview:[GJFloatPlayerManager shareInstance].playerView belowSubview:delegate.tabVC.tabBar];
     });
 }

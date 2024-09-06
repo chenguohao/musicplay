@@ -7,12 +7,16 @@
 #import "TZImagePickerController.h"
 #import "MPAliOSSManager.h"
 #import "DNEHUD.h"
+#import "MPPlaylistService.h"
+#import "MPPlayListEditViewController.h"
+
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray<NSDictionary *> *models;
 @property (nonatomic, strong) NSIndexPath *expandedIndexPath;
 @property (nonatomic) NSInteger curSection;
+@property (nonatomic,strong) MPPlaylistService* service;
 @end
 
 @implementation ViewController
@@ -20,12 +24,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.curSection = -1;
+    self.service = [MPPlaylistService new];
     self.view.backgroundColor = UIColor.whiteColor;
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
 
  
     self.models = [self fetchData]; // Get your data models here
-    self.expandedIndexPath = nil;
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
    
@@ -56,13 +60,62 @@
        
        // 将按钮设置为导航栏左侧按钮
        self.navigationItem.rightBarButtonItem = newButton;
-    [[MPGlobalPlayerManager globalManager] showPlayer];
+    [[MPGlobalPlayerManager globalManager] showPlayer:self.view];
+    [self refreshList];
 }
+
+
+- (void)refreshList{
+    [self.service getPlaylistWithPage:1 Size:10 Result:^(NSArray * list) {
+        int n = list.count;
+    }];
+}
+
 - (void)onMenu {
     [BDLeftMenuView show];
 }
 
 - (void)onAdd{
+    MPPlayListEditViewController * editVC = [MPPlayListEditViewController new];
+    NSString* t = @"111";
+    NSMutableDictionary* info = @{@"title":t};
+    [editVC setupInfo:info];
+    [self.navigationController pushViewController:editVC animated:YES];
+    return;;
+    
+    
+    
+    [editVC showCreatePlaylistAlert:self
+                           onCreate:^(NSString * title) {
+        NSMutableDictionary* info = @{@"title":title};
+        [editVC setupInfo:info];
+        [self.navigationController pushViewController:editVC animated:YES];
+    }];
+//
+    
+    return;
+    NSDictionary* item = self.models[0];
+    
+    NSString* title = item[@"title"];
+    NSString* cover = item[@"coverUrl"];
+    NSArray* playlist = item[@"playlist"];
+    
+    [DNEHUD showLoading:@""];
+    [self.service createPlaylistWithTitle:title Cover:cover PlayItems:playlist Result:^(NSError * err) {
+        [DNEHUD hideHUD];
+        
+        if(err == nil){
+            [DNEHUD showMessage:@"success"];
+            
+           
+            
+            
+        }else{
+            [DNEHUD showMessage:@"fail"];
+        }
+        
+    }];
+    return;
     TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
     [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
         
@@ -125,6 +178,8 @@
     NSArray* playlist = self.models[indexPath.section][@"playlist"];
     NSDictionary* info = playlist[indexPath.row];
     [cell configureWithInfo:info];
+    [cell setBgColor2: indexPath.section % 2 == 0?MPUITheme.contentBg:MPUITheme.contentBg_semi];
+       
     return cell;
 }
 

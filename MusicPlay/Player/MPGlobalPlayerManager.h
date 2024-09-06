@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MPGlobalPlayerManager : NSObject
 + (instancetype)globalManager;
-- (void)showPlayer;
+- (void)showPlayer:(UIView*)view;
 - (void)playWithIndex:(int)index
              playList:(NSArray*)playlist;
 @end

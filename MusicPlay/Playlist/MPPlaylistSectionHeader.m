@@ -2,7 +2,7 @@
 #import "Masonry.h"
 #import "UIImageView+WebCache.h" // Assuming you are using SDWebImage for loading images
 #import "MPPlayDetailListCell.h"
-@interface MPPlaylistSectionHeader()<UITableViewDelegate,UITableViewDataSource>
+@interface MPPlaylistSectionHeader()
 
 @property (nonatomic, strong) UIImageView *coverImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UIImageView* iconPlay;
 @property (nonatomic, strong) UIView* cardView;
 @property (nonatomic, strong) UIView* containerView;
-@property (nonatomic, strong) UIView* topView;
+@property (nonatomic, strong) UIView* bottomView;
 @property (nonatomic,strong) UITableView* tableView;
 @property (nonatomic, strong) NSDictionary* infoDict;
 @end
@@ -35,20 +35,11 @@
 }
 
 - (void)setupUI {
-    
-//    self.contentView.backgroundColor = UIColor.darkGrayColor;
-   
     self.containerView = [UIView new];
     [self addSubview:self.containerView];
     
-    self.tableView = [UITableView new];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.tableView registerClass:[MPPlayDetailListCell class] forCellReuseIdentifier:@"MPPlayDetailListCell"];
-    [self.containerView addSubview:self.tableView];
-    
-    self.topView = [UIView new];
-    [self.containerView addSubview:self.topView];
+    self.bottomView = [UIView new];
+    [self.containerView addSubview:self.bottomView];
     
     self.cardView = [UIView new];
     self.cardView.backgroundColor = UIColor.whiteColor;
@@ -62,12 +53,12 @@
 
     self.nameLabel = [[UILabel alloc] init];
     self.nameLabel.font = [UIFont boldSystemFontOfSize:16];
-    self.nameLabel.textColor = [UIColor blackColor];
+    self.nameLabel.textColor = MPUITheme.contentText;
     [self.cardView addSubview:self.nameLabel];
     
     self.artNameLabel = [[UILabel alloc] init];
     self.artNameLabel.font = [UIFont systemFontOfSize:12];
-    self.artNameLabel.textColor = [UIColor lightGrayColor];
+    self.artNameLabel.textColor = MPUITheme.contentText_semi;
     [self.cardView addSubview:self.artNameLabel];
     
     self.detailLabel = [[UILabel alloc] init];
@@ -100,18 +91,18 @@
             make.bottom.equalTo(self);
     }];
     
-    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.containerView);
             make.right.equalTo(self.containerView);
-            make.top.equalTo(self.containerView);
+            make.bottom.equalTo(self.containerView);
             make.height.equalTo(@(20));
     }];
     
     [self.cardView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.containerView);
+        make.left.equalTo(self.containerView);
         make.right.equalTo(self.containerView);
         make.top.equalTo(self.containerView);
-            make.height.equalTo(@(95));
+        make.height.equalTo(@(95));
     }];
     
     [self.coverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -178,14 +169,21 @@
     self.nameLabel.text = name;
     self.artNameLabel.text = [NSString stringWithFormat:@"by %@", artName];
     
+    
     if (index % 2 == 0) {
-        self.containerView.backgroundColor = UIColor.lightGrayColor;
-        self.cardView.backgroundColor = UIColor.darkGrayColor;
-        self.topView.backgroundColor = UIColor.darkGrayColor;
+        if(index == 0){
+            self.containerView.backgroundColor = UIColor.clearColor;
+        }else{
+            self.containerView.backgroundColor = MPUITheme.contentBg_semi;
+        }
+        
+        
+        self.cardView.backgroundColor = MPUITheme.contentBg;
+        self.bottomView.backgroundColor = MPUITheme.contentBg;
     }else{
-        self.containerView.backgroundColor = UIColor.darkGrayColor;
-        self.cardView.backgroundColor = UIColor.lightGrayColor;
-        self.topView.backgroundColor = UIColor.lightGrayColor;
+        self.containerView.backgroundColor = MPUITheme.contentBg;
+        self.cardView.backgroundColor = MPUITheme.contentBg_semi;
+        self.bottomView.backgroundColor = MPUITheme.contentBg_semi;
     }
     CGFloat newHeight = 60*((NSArray*)self.infoDict[@"playlist"]).count;
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -199,48 +197,5 @@
 }
 
 
-
-- (void)setIsExpanded:(BOOL)isExpanded{
-    _isExpanded = isExpanded;
-//    self.tableView.hidden = !isExpanded;
-//    if(isExpanded){
-        [self.tableView reloadData];
-//    }
-    CGFloat newHeight = isExpanded ?60*((NSArray*)self.infoDict[@"playlist"]).count:0;
-//    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.cardView.mas_bottom).offset(5);
-//        make.left.equalTo(self.containerView).offset(10);
-//        make.right.equalTo(self.containerView).offset(-10);
-//        make.height.equalTo(@(newHeight));
-//    }];
-    
-    
-
-//    [UIView animateWithDuration:0.3 animations:^{
-//        self.tableView.frame = CGRectMake(10, 0, self.frame.size.width - 40, newHeight);
-//    }];
-       
-        
-}
-
-#pragma mark - tableview datasource
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return((NSArray*) self.infoDict[@"playlist"]).count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    MPPlayDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPPlayDetailListCell" forIndexPath:indexPath];
-    NSDictionary *item = self.infoDict[@"playlist"][indexPath.row];
-    [cell configureWithInfo:item];
-    return cell;
-}
 
 @end

@@ -18,29 +18,29 @@
 			<dict>
 				<key>attributes</key>
 				<dict>
+					<key>artwork</key>
+					<dict>
+						<key>bgColor</key>
+						<string>020100</string>
+						<key>height</key>
+						<integer>1425</integer>
+						<key>textColor1</key>
+						<string>ffffff</string>
+						<key>textColor2</key>
+						<string>ee9502</string>
+						<key>textColor3</key>
+						<string>cccccb</string>
+						<key>textColor4</key>
+						<string>bf7701</string>
+						<key>url</key>
+						<string>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/{w}x{h}bb.jpg</string>
+						<key>width</key>
+						<integer>1425</integer>
+					</dict>
 					<key>albumName</key>
 					<string>Country Songs 20s</string>
 					<key>artistName</key>
 					<string>Jamey Johnson</string>
-					<key>artwork</key>
-					<dict>
-						<key>bgColor</key>
-						<string>000004</string>
-						<key>height</key>
-						<integer>1400</integer>
-						<key>textColor1</key>
-						<string>e5e9f0</string>
-						<key>textColor2</key>
-						<string>c5c689</string>
-						<key>textColor3</key>
-						<string>b7bac1</string>
-						<key>textColor4</key>
-						<string>9d9e6e</string>
-						<key>url</key>
-						<string>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ef/65/32/ef6532cb-7ca2-b1d5-3588-43c42223ced1/5059460324664.jpg/{w}x{h}bb.jpg</string>
-						<key>width</key>
-						<integer>1400</integer>
-					</dict>
 					<key>audioVariants</key>
 					<array/>
 					<key>composerName</key>
@@ -450,65 +450,11 @@
 					<string>Green Day</string>
 					<key>artwork</key>
 					<dict>
-						<key>bgColor</key>
-						<string>020100</string>
-						<key>height</key>
-						<integer>1425</integer>
-						<key>textColor1</key>
-						<string>ffffff</string>
-						<key>textColor2</key>
-						<string>ee9502</string>
-						<key>textColor3</key>
-						<string>cccccb</string>
-						<key>textColor4</key>
-						<string>bf7701</string>
 						<key>url</key>
 						<string>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b8/36/d6/b836d655-7ef3-5c93-734e-fb77c4981308/mzi.opxridrf.jpg/{w}x{h}bb.jpg</string>
-						<key>width</key>
-						<integer>1425</integer>
 					</dict>
-					<key>audioVariants</key>
-					<array/>
-					<key>composerName</key>
-					<string>Billie Joe Armstrong, David Bowie, John Philips, Mike Dirnt &amp; Tré Cool</string>
-					<key>contentRating</key>
-					<string>clean</string>
-					<key>discNumber</key>
-					<integer>1</integer>
-					<key>durationInMillis</key>
-					<integer>322040</integer>
-					<key>genreNames</key>
-					<array>
-						<string>Alternative</string>
-						<string>Music</string>
-						<string>Punk</string>
-						<string>Rock</string>
-						<string>Adult Alternative</string>
-					</array>
-					<key>hasLyrics</key>
-					<true/>
-					<key>isAppleDigitalMaster</key>
-					<false/>
-					<key>isrc</key>
-					<string>USRE10900679</string>
 					<key>name</key>
 					<string>21 Guns</string>
-					<key>playParams</key>
-					<dict>
-						<key>catalogId</key>
-						<string>315611467</string>
-						<key>id</key>
-						<string>315611467</string>
-						<key>kind</key>
-						<string>song</string>
-					</dict>
-					<key>previews</key>
-					<array>
-						<dict>
-							<key>url</key>
-							<string>https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/7c/cc/4f/7ccc4f71-2f5c-6a49-d6e5-0c98c8d32e80/mzaf_9206916011381489115.plus.aac.p.m4a</string>
-						</dict>
-					</array>
 					<key>releaseDate</key>
 					<string>2009-05-15</string>
 					<key>trackNumber</key>

@@ -33,6 +33,9 @@
     [self addSubview:self.detailLabel];
 }
 
+
+
+
 - (void)setupConstraint {
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(15);

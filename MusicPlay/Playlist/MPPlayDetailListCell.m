@@ -22,36 +22,39 @@
 }
 
 - (void)setupUI {
-    self.containerView = [UIView new];
-    self.containerView.backgroundColor = UIColor.lightGrayColor;
+    
+    
+    
     [self.contentView addSubview:self.containerView];
     
 //    self.contentView.backgroundColor = UIColor.redColor;
-    self.backgroundColor = UIColor.clearColor;
+    self.backgroundColor = UIColor.whiteColor;
     self.coverImageView = [[UIImageView alloc] init];
     [self.containerView addSubview:self.coverImageView];
     
     self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.textColor = MPUITheme.contentText_semi;
     self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
     [self.containerView addSubview:self.titleLabel];
     
     self.albumLabel =[[UILabel alloc] init];
+    self.albumLabel.textColor = MPUITheme.contentText_semi;
     self.albumLabel.font = [UIFont boldSystemFontOfSize:16];
     [self.containerView addSubview:self.albumLabel];
     
     self.artistLabel = [[UILabel alloc] init];
     self.artistLabel.font = [UIFont systemFontOfSize:14];
-    self.artistLabel.textColor = [UIColor grayColor];
+    self.artistLabel.textColor = MPUITheme.contentText;
     [self.containerView addSubview:self.artistLabel];
 }
 
 - (void)setupConstraint {
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView).mas_offset(10);
-            make.right.equalTo(self.contentView).mas_offset(-10);
+        make.left.equalTo(self.contentView).mas_offset(10);
+        make.right.equalTo(self.contentView).mas_offset(-10);
         make.top.bottom.equalTo(self.contentView);
     }];
-    
+     
     [self.coverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.containerView).offset(15);
         make.centerY.equalTo(self.containerView);
@@ -72,9 +75,9 @@
     }];
     
     [self.albumLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.containerView);
+        make.right.equalTo(self.containerView);
         make.width.lessThanOrEqualTo(@(200));
-            make.top.equalTo(self.titleLabel.mas_bottom);
+        make.top.equalTo(self.titleLabel.mas_bottom);
     }];
 }
 
@@ -83,6 +86,7 @@
     self.artistLabel.text = info[@"attributes"][@"artistName"];
     self.albumLabel.text = info[@"attributes"][@"albumName"];
     [self.coverImageView sd_setImageWithURL:[NSURL URLWithString: [self wrapUrl:info[@"attributes"][@"artwork"][@"url"]]] ];  // Assuming image name is provided
+      
 }
 
 - (NSString*)wrapUrl:(NSString*)url{
@@ -90,6 +94,17 @@
     resultUrl = [resultUrl stringByReplacingOccurrencesOfString:@"{h}" withString:@"100"];
    
     return  resultUrl;
+}
+-(void)setBgColor2:(UIColor *)bgColor{
+    self.containerView.backgroundColor = bgColor;
+     
+}
+
+-(UIView *)containerView{
+    if(_containerView ==nil){
+        _containerView = [UIView new];
+    }
+    return _containerView;
 }
 
 @end
