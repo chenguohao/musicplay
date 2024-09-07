@@ -8,6 +8,7 @@
 @property (nonatomic, strong) UILabel *artistLabel;
 @property (nonatomic,strong) UILabel *albumLabel;
 @property (nonatomic,strong) UIView *containerView;
+@property (nonatomic,strong) UIView *whiteBg;
 @end
 
 @implementation MPPlayDetailListCell
@@ -24,6 +25,9 @@
 - (void)setupUI {
     
     
+    self.whiteBg = [UIView new];
+//    self.whiteBg.backgroundColor = MPUITheme.theme_white;
+    [self.containerView addSubview:self.whiteBg];
     
     [self.contentView addSubview:self.containerView];
     
@@ -49,6 +53,13 @@
 }
 
 - (void)setupConstraint {
+    
+    [self.whiteBg mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.containerView).offset(10);
+            make.right.equalTo(self.containerView).offset(-10);
+            make.top.bottom.equalTo(self.containerView);
+    }];
+    
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView).mas_offset(10);
         make.right.equalTo(self.contentView).mas_offset(-10);
@@ -85,7 +96,7 @@
     self.titleLabel.text = info[@"attributes"][@"name"];
     self.artistLabel.text = info[@"attributes"][@"artistName"];
     self.albumLabel.text = info[@"attributes"][@"albumName"];
-    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString: [self wrapUrl:info[@"attributes"][@"artwork"][@"url"]]] ];  // Assuming image name is provided
+    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString: [self wrapUrl:info[@"attributes"][@"artwork"][@"url"]]] placeholderImage:[UIImage imageNamed:@"cover_default"] ];  // Assuming image name is provided
       
 }
 

@@ -158,13 +158,13 @@
 - (void)configureWithDictionary:(NSDictionary *)dict
                           index:(NSInteger)index {
     self.infoDict = dict;
-    NSString *coverUrl = dict[@"coverUrl"];
+    NSString *coverUrl = dict[@"cover_url"];
     NSString *name = dict[@"title"];
     NSString *artName = dict[@"artistname"];
 //    NSString *detail = dict[@"likenum"];
     self.likeNumLabel.text = [dict[@"likenum"] stringValue];
     self.playNumLabel.text =[dict[@"playnum"] stringValue];
-    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:coverUrl] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:coverUrl] placeholderImage:[UIImage imageNamed:@"cover_default"]];
 
     self.nameLabel.text = name;
     self.artNameLabel.text = [NSString stringWithFormat:@"by %@", artName];

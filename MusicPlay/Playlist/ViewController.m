@@ -29,7 +29,7 @@
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
 
  
-    self.models = [self fetchData]; // Get your data models here
+    self.models = @[]; // Get your data models here
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
    
@@ -67,7 +67,8 @@
 
 - (void)refreshList{
     [self.service getPlaylistWithPage:1 Size:10 Result:^(NSArray * list) {
-        int n = list.count;
+        self.models = list;
+        [self.tableView reloadData];
     }];
 }
 
@@ -161,7 +162,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if(self.curSection == section){
-        NSArray* playlist = self.models[section][@"playlist"];
+        NSArray* playlist = self.models[section][@"list_item"];
         return playlist.count;
     }
     
@@ -174,8 +175,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MPPlayDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CardCell" forIndexPath:indexPath];
-
-    NSArray* playlist = self.models[indexPath.section][@"playlist"];
+    NSArray* playlist = self.models[indexPath.section][@"list_item"];
     NSDictionary* info = playlist[indexPath.row];
     [cell configureWithInfo:info];
     [cell setBgColor2: indexPath.section % 2 == 0?MPUITheme.contentBg:MPUITheme.contentBg_semi];
@@ -227,7 +227,7 @@
 
 - (void)removeRowInCurSection:(int)section{
     NSMutableArray* sourceArr = [NSMutableArray new];
-    NSArray* playList = self.models[section][@"playlist"];
+    NSArray* playList = self.models[section][@"list_item"];
     for (int i = 0; i < [playList count]; i++)
     {
         // 取得当前分区行indexPath
@@ -244,7 +244,7 @@
 
 - (void)addRowInCurSection{
     NSMutableArray* sourceArr = [NSMutableArray new];
-    NSArray* playList = self.models[self.curSection][@"playlist"];
+    NSArray* playList = self.models[self.curSection][@"list_item"];
     for (int i = 0; i < [playList count]; i++)
     {
         // 取得当前分区行indexPath
@@ -260,7 +260,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSArray* playlist = self.models[indexPath.section][@"playlist"];
+    NSArray* playlist = self.models[indexPath.section][@"list_item"];
     
     
     

@@ -34,5 +34,8 @@
     return [UIColor colorWithHexString:@"74C69D"];
 }
 
++(UIColor*)theme_white{
+    return [UIColor colorWithHexString:@"D8F3DC"];
+}
 
 @end

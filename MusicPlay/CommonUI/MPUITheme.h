@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(UIColor*)contentBg_semi;
 +(UIColor*)contentText;
 +(UIColor*)contentText_semi;
++(UIColor*)theme_white;
 @end
 
 NS_ASSUME_NONNULL_END

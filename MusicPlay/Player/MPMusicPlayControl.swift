@@ -37,9 +37,6 @@ struct MPFloatPlayerView: View {
     private var albumCoverUrl:URL? {
         if let currentEntry = musicPlayerQueue.currentEntry {
             let url =  currentEntry.artwork?.url(width: 100, height: 100)
-                
-            localImage(url: url!)
-            
             return url
         }
         return nil
