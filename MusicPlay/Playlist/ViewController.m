@@ -11,6 +11,7 @@
 #import "MPPlayListEditViewController.h"
 #import "MPPrivacyPolicyViewController.h"
 #import "D9EULAViewController.h"
+#import "MJRefresh/MJRefresh.h"
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -33,7 +34,12 @@
     self.models = @[]; // Get your data models here
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-   
+    __weak typeof(self) wkself = self;
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self refreshList];
+        [self.tableView.mj_header endRefreshing];
+    }];
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColor.whiteColor;

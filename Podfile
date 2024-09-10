@@ -16,6 +16,7 @@ target 'MusicPlay' do
   pod 'SDWebImageSwiftUI'
   pod 'AFNetworking', '~> 4.0'
   pod 'Mantle'
+  pod 'MJRefresh'
 end
 post_install do |installer|
     installer.generated_projects.each do |project|
