@@ -9,7 +9,22 @@
 #define PrefixHeader_pch
 #import "MPUITheme.h"
 #import "UIColor+Hex.h"
-// Include any system framework and library headers here that should be included in all compilation units.
-// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <ReactiveObjC/ReactiveObjC.h>
+#import "MPUIManager.h"
+#import "DNEHUD.h"
+#import "Masonry.h"
+#import "UIButton+BgImg.h"
+#define CustomLocalizedString(key, comment) NSLocalizedString(key, comment)
+
+#ifndef UIColorHex
+#define UIColorHex(_hex_)   [UIColor colorWithHexString:((__bridge NSString *)CFSTR(#_hex_))]
+#endif
+
+
+#define FONTL(size) [UIFont systemFontOfSize:size]
+#define FONTM(size) [UIFont systemFontOfSize:size]
+#define FONTB(size) [UIFont systemFontOfSize:size]
+#define FONTR(size) [UIFont systemFontOfSize:size]
+#define FONTS(size) [UIFont systemFontOfSize:size]
 
 #endif /* PrefixHeader_pch */

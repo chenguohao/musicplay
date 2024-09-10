@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)UIWindow* curWindow;
 + (instancetype)sharedManager;
 - (void)showLogin;
+- (UIViewController *)getCurrentViewController;
 @end
 
 NS_ASSUME_NONNULL_END

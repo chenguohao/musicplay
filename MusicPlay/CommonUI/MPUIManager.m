@@ -7,6 +7,7 @@
 
 #import "MPUIManager.h"
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 #import "MPLoginViewController.h"
 @implementation MPUIManager
 + (instancetype)sharedManager {
@@ -54,4 +55,29 @@
     }
     return currentWindow;
 }
+
+- (UIViewController *)getCurrentViewController {
+    UIViewController *appRootVC = [self curWindow].rootViewController;
+    if (!appRootVC) {
+        return nil;
+    }
+    UIViewController * topVC = [self topViewController:appRootVC];
+    NSLog(@"topVC =  %@",topVC);
+    return topVC;
+}
+
+- (UIViewController *)topViewController:(UIViewController *)rootViewController {
+    UIViewController *topViewController = rootViewController;
+    if (topViewController.presentedViewController) {
+        return [self topViewController:topViewController.presentedViewController];
+    }
+    if ([topViewController isKindOfClass:[UINavigationController class]]) {
+        return [self topViewController:((UINavigationController *)topViewController).viewControllers.lastObject];
+    }
+    if ([topViewController isKindOfClass:[UITabBarController class]]) {
+        return [self topViewController:((UITabBarController *)topViewController).selectedViewController];
+    }
+    return topViewController;
+}
+
 @end

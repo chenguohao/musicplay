@@ -1,0 +1,37 @@
+End-User License Agreement (EULA)
+
+Last Updated: 2023-12-21
+
+Please read this End-User License Agreement ("Agreement") carefully before using Lit Wavee ("the App") operated by Sense Technologies Pte.Ltd. ("the Developer").
+
+1. Acceptance of Terms
+
+By downloading, installing, or using the App, you agree to be bound by the terms and conditions of this Agreement. If you do not agree with all the terms and conditions, do not use the App.
+
+2. User Conduct
+
+You agree that you will not use the App to engage in any activity that is illegal, harmful, or violates the rights of others. Specifically, you acknowledge and agree that there is no tolerance for objectionable content or abusive users within the App. This includes, but is not limited to, content that is offensive, discriminatory, or violates community standards.
+
+3. Content Moderation
+
+The Developer reserves the right to monitor, review, and remove any content that, in its sole discretion, violates this Agreement or is deemed objectionable. The Developer also reserves the right to suspend or terminate user accounts that engage in abusive behavior or violate these terms.
+
+4. Termination
+
+This Agreement is effective until terminated. The Developer may terminate your access to the App at any time without notice if you fail to comply with the terms of this Agreement.
+
+5. Disclaimer of Warranty
+
+The App is provided "as is" without any warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability and fitness for a particular purpose.
+
+6. Limitation of Liability
+
+The Developer shall not be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with the use or performance of the App.
+
+7. Changes to Terms
+
+The Developer reserves the right to modify or replace these terms at any time. Your continued use of the App after any changes constitutes acceptance of those changes.
+
+8. Contact Information
+
+If you have any questions about this Agreement, please contact support@senseTech.com.

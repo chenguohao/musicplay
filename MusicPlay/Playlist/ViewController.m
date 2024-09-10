@@ -9,7 +9,8 @@
 #import "DNEHUD.h"
 #import "MPPlaylistService.h"
 #import "MPPlayListEditViewController.h"
-
+#import "MPPrivacyPolicyViewController.h"
+#import "D9EULAViewController.h"
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -208,6 +209,13 @@
     [view addGestureRecognizer:tap];
 //    view.backgroundColor = UIColor.redColor;
     return view;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self showPrivacy];
+}
+- (void)showPrivacy{
+    [D9EULAViewController showEULAIfNeed];
 }
 
 - (void)onHeader:(id)sender{
