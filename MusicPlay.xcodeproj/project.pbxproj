@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		46209C372C6B129100058334 /* MPPlaylistSectionHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 46209C362C6B129100058334 /* MPPlaylistSectionHeader.m */; };
 		46209C392C6B15B800058334 /* playlist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46209C382C6B15B800058334 /* playlist.plist */; };
+		462574AA2C9314AC00C91CE1 /* ReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 462574A92C9314AC00C91CE1 /* ReportManager.m */; };
 		463180552C7C5925004D47DE /* MPAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 463180542C7C5925004D47DE /* MPAuthService.m */; };
 		463180572C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 in Resources */ = {isa = PBXBuildFile; fileRef = 463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */; };
 		463CC1542C6DEF2000993ABB /* MPPlayListEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC1532C6DEF2000993ABB /* MPPlayListEditViewController.m */; };
@@ -63,6 +64,8 @@
 		46209C352C6B129100058334 /* MPPlaylistSectionHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlaylistSectionHeader.h; sourceTree = "<group>"; };
 		46209C362C6B129100058334 /* MPPlaylistSectionHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlaylistSectionHeader.m; sourceTree = "<group>"; };
 		46209C382C6B15B800058334 /* playlist.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = playlist.plist; sourceTree = "<group>"; };
+		462574A82C9314AC00C91CE1 /* ReportManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReportManager.h; sourceTree = "<group>"; };
+		462574A92C9314AC00C91CE1 /* ReportManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReportManager.m; sourceTree = "<group>"; };
 		463180532C7C5925004D47DE /* MPAuthService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPAuthService.h; sourceTree = "<group>"; };
 		463180542C7C5925004D47DE /* MPAuthService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPAuthService.m; sourceTree = "<group>"; };
 		463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AuthKey_9TA7FWK494.p8; sourceTree = "<group>"; };
@@ -195,6 +198,17 @@
 				466F1AE52C802ACB00986AA6 /* MPPlaylistService.m */,
 			);
 			path = Playlist;
+			sourceTree = "<group>";
+		};
+		462574A72C93146000C91CE1 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				46F909BC2C8ED30A00A04F62 /* D9ReportAlert.h */,
+				46F909BD2C8ED30A00A04F62 /* D9ReportAlert.m */,
+				462574A82C9314AC00C91CE1 /* ReportManager.h */,
+				462574A92C9314AC00C91CE1 /* ReportManager.m */,
+			);
+			path = Report;
 			sourceTree = "<group>";
 		};
 		463CC1512C6DEEEC00993ABB /* Edit */ = {
@@ -388,6 +402,7 @@
 		46F909B42C8ED13300A04F62 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				462574A72C93146000C91CE1 /* Report */,
 				464E0E8C2C90449400733549 /* About */,
 				46F909C32C8ED30A00A04F62 /* EULA */,
 				46F909B52C8ED14800A04F62 /* MPPrivacyPolicyViewController.h */,
@@ -403,8 +418,6 @@
 				46F909B92C8ED30A00A04F62 /* D9BasicAlertView.m */,
 				46F909BA2C8ED30A00A04F62 /* D9EULAViewController.h */,
 				46F909BB2C8ED30A00A04F62 /* D9EULAViewController.m */,
-				46F909BC2C8ED30A00A04F62 /* D9ReportAlert.h */,
-				46F909BD2C8ED30A00A04F62 /* D9ReportAlert.m */,
 				46F909BE2C8ED30A00A04F62 /* D9UserAgreementAlert.h */,
 				46F909BF2C8ED30A00A04F62 /* D9UserAgreementAlert.m */,
 				46F909C02C8ED30A00A04F62 /* eula.txt */,
@@ -558,6 +571,7 @@
 				466F1AE62C802ACB00986AA6 /* MPPlaylistService.m in Sources */,
 				464E4B3F2C6A4A3F0004AE4C /* MPGlobalPlayerManager.m in Sources */,
 				4647F1702C64EAFA002CCBE3 /* ViewController.m in Sources */,
+				462574AA2C9314AC00C91CE1 /* ReportManager.m in Sources */,
 				46922DBD2C886C3F00B073D9 /* MPMusicSearchViewController.m in Sources */,
 				4647F16A2C64EAFA002CCBE3 /* AppDelegate.m in Sources */,
 				46A4EE9B2C72F3AF0021A3B1 /* MPMusicPlayControl.swift in Sources */,

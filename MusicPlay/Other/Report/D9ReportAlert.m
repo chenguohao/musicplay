@@ -6,6 +6,7 @@
 //
 
 #import "D9ReportAlert.h"
+#import "ReportManager.h"
 @interface D9ReportAlert ()
 @end
 
@@ -22,8 +23,8 @@
     return objc;
 }
 
--(void)showReportWithContentID:(NSString*)contentID
-                      AuthorID:(NSString*)authID
+-(void)showReportWithContentID:(int)contentID
+                      UserID:(int)authID
                    FinishBlock:(void(^)(NSString*))finishBlock{
  
     UIAlertController *sheets = [UIAlertController alertControllerWithTitle:CustomLocalizedString(@"Report", nil) message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -35,15 +36,15 @@
     [sheets addAction:cancelAction];
     @weakify(self)
     
-    UIAlertAction *hideContentAction = [UIAlertAction actionWithTitle:CustomLocalizedString(@"hide_content", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *hideContentAction = [UIAlertAction actionWithTitle:@"Hide this content" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self)
-        [self _reportAudioWithReason:@"hide_content" ContentID:contentID AuthorID:authID FinishBlock:finishBlock];
+        [self _reportAudioWithReason:@"Hide this content" ContentID:contentID AuthorID:authID FinishBlock:finishBlock];
     }];
     [sheets addAction:hideContentAction];
     
-    UIAlertAction *hideUserAction = [UIAlertAction actionWithTitle:CustomLocalizedString(@"hide_user", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *hideUserAction = [UIAlertAction actionWithTitle:@"Hide this user" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self)
-        [self _reportAudioWithReason:@"hide_user" ContentID:contentID AuthorID:authID FinishBlock:finishBlock];
+        [self _reportAudioWithReason:@"Hide this user" ContentID:contentID AuthorID:authID FinishBlock:finishBlock];
     }];
     [sheets addAction:hideUserAction];
     
@@ -74,60 +75,28 @@
 }
 
 - (void)_reportAudioWithReason:(NSString *)reason
-                     ContentID:(NSString *)contentID
-                      AuthorID:(NSString *)authorID
+                     ContentID:(int)contentID
+                      AuthorID:(int)userID
                    FinishBlock:(void(^)(NSString*))finishBlock{
    
     
-    void (^onFinishBlock)(NSString* reason) = ^(NSString* reason){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([reason containsString:@"hide"]) {
-                
-                    if ([reason isEqualToString:@"hide_user"]) {
-                        [DNEHUD showMessage:CustomLocalizedString(@"toast_hide_user", nil)];
-                    }else{
-                        [DNEHUD showMessage:CustomLocalizedString(@"toast_hide_content", nil)];
-                    }
-                  
-             
-               
-            }else{
-                [DNEHUD showMessage:CustomLocalizedString(@"report_suc", nil)];
-            }
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([reason containsString:@"Hide"]) {
+                if ([reason isEqualToString:@"Hide this user"]) {
+                    [DNEHUD showMessage:@"You won't see this user's content."];
+                    [[ReportManager sharedManager] hideUser:userID];
+                }else{
+                    [DNEHUD showMessage:@"You won't see this content."];
+                    [[ReportManager sharedManager] hideContent:contentID];
+                }
+        }else{
+            [DNEHUD showMessage:@"Report Success\nWe will process within 24 hours"];
+        }
         if (finishBlock) {
             finishBlock(reason);
         }
-    };
+    });
     
-    if ([reason containsString:@"hide"]) {
-        NSInteger type = 0;
-        NSString* objID = @"";
-        if ([reason isEqualToString:@"hide_user"]) {
-            type = 2;
-            objID = authorID;
-        }else{
-            type = 1;
-            objID = contentID;
-        }
-        
-       
-        [DNEHUD showLoading:@""];
-//        [D9SquareNetworkHandler blockWithType:type param:objID sender:self success:^(NSDictionary *response) {
-//            DISMISSPROGRESS
-//            onFinishBlock(reason);
-//        } error:^(NSError *error) {
-//            DISMISSPROGRESS
-//        }];
-    }else{
-//        SHOWPROGRESS
-//        [GJNewAprReq reportAudioContentWithContentID:contentID author:authorID reason:reason success:^(id  _Nonnull response) {
-//            DISMISSPROGRESS
-//            onFinishBlock(reason);
-//        } ifFaile:^(NSError * _Nonnull error) {
-//            DISMISSPROGRESS
-//        }];
-    }
     
 
 }

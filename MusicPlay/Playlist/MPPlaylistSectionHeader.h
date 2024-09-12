@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isExpanded;
 - (void)configureWithDictionary:(NSDictionary *)dict
                           index:(NSInteger)index;
-
+- (void)setMoreAction:(void(^)(void))block;
 @end
 
 

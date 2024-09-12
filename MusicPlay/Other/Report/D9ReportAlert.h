@@ -11,8 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface D9ReportAlert : NSObject
 + (instancetype)sharedInstance;
--(void)showReportWithContentID:(NSString*)contentID
-                      AuthorID:(NSString*)authID
+-(void)showReportWithContentID:(int)contentID
+                      UserID:(int)authID
                    FinishBlock:(void(^)(NSString*))finishBlock;
 @end
 

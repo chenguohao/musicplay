@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UIView* bottomView;
 @property (nonatomic,strong) UITableView* tableView;
 @property (nonatomic, strong) NSDictionary* infoDict;
+@property (nonatomic, strong) UIButton* moreBtn;
+@property (nonatomic,copy) void(^onMoreBlock)(void);
 @end
 
 @implementation MPPlaylistSectionHeader
@@ -80,6 +82,18 @@
     
     self.playNumLabel = [UILabel new];
     [self.cardView addSubview:self.playNumLabel];
+    
+    self.moreBtn = [UIButton new];
+
+    UIImage *originalImage = [UIImage imageNamed:@"nav_more_28"];
+    UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.moreBtn setBackgroundImage:tintedImage forState:UIControlStateNormal];
+ 
+    
+    
+    [self.moreBtn setTintColor:MPUITheme.contentText];
+    [self.moreBtn addTarget:self action:@selector(onMore) forControlEvents:UIControlEventTouchUpInside];
+    [self.cardView addSubview:self.moreBtn];
 }
 
 - (void)setupConstraints {
@@ -103,6 +117,14 @@
         make.right.equalTo(self.containerView);
         make.top.equalTo(self.containerView);
         make.height.equalTo(@(95));
+    }];
+    
+    
+    [self.moreBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.cardView).offset(-5);
+            make.top.equalTo(self.cardView);
+            make.width.mas_equalTo(30);
+            make.height.mas_equalTo(30);
     }];
     
     [self.coverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -196,6 +218,13 @@
 //    self.detailLabel.text = detail;
 }
 
+- (void)onMore{
+    if(self.onMoreBlock){
+        self.onMoreBlock();
+    }
+}
 
-
+- (void)setMoreAction:(void(^)(void))block{
+    self.onMoreBlock = block;
+}
 @end

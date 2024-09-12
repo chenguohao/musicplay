@@ -12,6 +12,8 @@
 #import "MPPrivacyPolicyViewController.h"
 #import "D9EULAViewController.h"
 #import "MJRefresh/MJRefresh.h"
+#import "D9ReportAlert.h"
+#import "ReportManager.h"
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -82,9 +84,27 @@
 
 - (void)refreshList{
     [self.service getPlaylistWithPage:1 Size:10 Result:^(NSArray * list) {
-        self.models = list;
+        
+        
+        
+        [self wrapReportWithList:list];
+        
+        
         [self.tableView reloadData];
     }];
+}
+
+- (void)wrapReportWithList:(NSArray*)list{
+    NSMutableArray* marray = [NSMutableArray new];
+    for (NSDictionary* info in list) {
+        int userID = [info[@"owner_id"] intValue];
+        int contentID = [info[@"playlist_id"] intValue];
+        if([[ReportManager sharedManager] isOKWithUser:userID ContentID:contentID]){
+            [marray addObject:info];
+        }
+    }
+    
+    self.models = marray;
 }
 
 - (void)onMenu {
@@ -222,8 +242,48 @@
     MPPlaylistSectionHeader* view = [MPPlaylistSectionHeader new];
     view.tag = section;
     [view configureWithDictionary:self.models[section] index:section];
+    int contentID = [self.models[section][@"playlist_id"] intValue] ;
+    int userID = [self.models[section][@"owner_id"] intValue];
     UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onHeader:)];
     [view addGestureRecognizer:tap];
+    D9ReportAlert* report = [[D9ReportAlert alloc] init];
+    [view setMoreAction:^{
+       
+        [report showReportWithContentID:contentID
+                                 UserID:userID
+                            FinishBlock:^(NSString * reason) {
+            if([reason containsString:@"Hide"]){
+                
+                
+                [self.tableView beginUpdates];
+                if ([reason  isEqualToString:@"Hide this content"]) {
+                  
+                    NSMutableIndexSet* sections = [NSMutableIndexSet new];
+                    for (int i = 0; i < self.models.count; i++) {
+                        if (contentID == [self.models[i][@"playlist_id"] intValue]) {
+                            [sections addIndex:i];
+                        }
+                    }
+                    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+                    
+                }else{
+                    NSMutableIndexSet* sections = [NSMutableIndexSet new];
+                    for (int i = 0; i < self.models.count; i++) {
+                        if (userID == [self.models[i][@"owner_id"] intValue]) {
+                            [sections addIndex:i];
+                        }
+                    }
+                    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+                }
+              
+                [self wrapReportWithList:self.models];
+                [self.tableView endUpdates];
+                
+               
+//                [self.tableView reloadData];
+            }
+        }];
+    }];
 //    view.backgroundColor = UIColor.redColor;
     return view;
 }
