@@ -27,7 +27,7 @@
     [super viewDidLoad];
     self.curSection = -1;
     self.service = [MPPlaylistService new];
-    self.view.backgroundColor = UIColor.whiteColor;
+    self.view.backgroundColor = MPUITheme.theme_white;
     self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
 
  
@@ -36,13 +36,13 @@
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     __weak typeof(self) wkself = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self refreshList];
-        [self.tableView.mj_header endRefreshing];
+        [wkself refreshList];
+        [wkself.tableView.mj_header endRefreshing];
     }];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.backgroundColor = UIColor.whiteColor;
+    self.tableView.backgroundColor = MPUITheme.theme_white;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[MPPlayDetailListCell class] forCellReuseIdentifier:@"CardCell"];
     [self.view addSubview:self.tableView];
@@ -53,20 +53,28 @@
             make.right.equalTo(self.view.mas_safeAreaLayoutGuideRight);
         }];
     
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithTitle:@"menu"
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(onMenu)];
-       
+    
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = CGRectMake(0, 0, 40, 40);
+//    [btn setImage:[UIImage imageNamed:@"icon_menu"] forState:UIControlStateNormal];
+//    [btn addTarget:self action:@selector(onMenu) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_menu"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(onMenu)];
+    menuButton.tintColor = MPUITheme.contentBg_semi;
        // 将按钮设置为导航栏左侧按钮
        self.navigationItem.leftBarButtonItem = menuButton;
-    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithTitle:@"+"
+    UIBarButtonItem *newButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"set_tag_add_btn"]
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:self
                                                                      action:@selector(onAdd)];
-       
+    newButton.tintColor = MPUITheme.contentBg_semi;
        // 将按钮设置为导航栏左侧按钮
        self.navigationItem.rightBarButtonItem = newButton;
+    
     [[MPGlobalPlayerManager globalManager] showPlayer:self.view];
     [self refreshList];
 }
@@ -80,7 +88,10 @@
 }
 
 - (void)onMenu {
-    [BDLeftMenuView show];
+    BDLeftMenuView* leftmenu = [BDLeftMenuView show];
+    [leftmenu setPushBlock:^(UIViewController * vc) {
+        [self.navigationController pushViewController:vc animated:YES];
+    }];
 }
 
 - (void)onAdd{

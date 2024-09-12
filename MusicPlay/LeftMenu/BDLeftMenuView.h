@@ -17,7 +17,7 @@ static NSString *kBDLeftMenuViewEventNotification = @"kBDLeftMenuViewEventNotifi
 
 + (BDLeftMenuView *)getInstanceView;
 
-+ (void)show;
++ (BDLeftMenuView*)show;
 + (void)hide;
 
 + (void)showInView:(UIView *)superView;
@@ -32,6 +32,9 @@ static NSString *kBDLeftMenuViewEventNotification = @"kBDLeftMenuViewEventNotifi
 // 修改菜单列表的数据  比如：切换语言时，或者新增，或者删除列表项时
 - (void)changeMenuDataList:(NSArray *)menuDataList;
 
+
+
+- (void)setPushBlock:(void(^)(UIViewController*))block;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 +(UIColor*)contentText;
 +(UIColor*)contentText_semi;
 +(UIColor*)theme_white;
+
++ (UIFont*)font_normal:(CGFloat)size;
++ (UIFont*)font_bold:(CGFloat)size;
 @end
 
 NS_ASSUME_NONNULL_END

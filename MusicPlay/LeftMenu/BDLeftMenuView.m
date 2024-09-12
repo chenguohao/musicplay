@@ -14,6 +14,8 @@
 #import "MPProfileManager.h"
 #import "ReactiveObjC/ReactiveObjC.h"
 #import "MPUserProfile.h"
+#import "MPAboutViewController.h"
+#import "MPProfileEditViewController.h"
 #define UIScreenBounds          [UIScreen mainScreen].bounds
 #define BDLeftMenuViewMaxWidth  UIScreenBounds.size.width * 0.70  // 左侧白色菜单的宽度
 #define AnimationDuration       0.25
@@ -42,7 +44,9 @@ static BDLeftMenuView *_leftMenuView = nil;
 @property (nonatomic, strong) UIImageView* profileAvatar;
 @property (nonatomic, strong) UILabel* profileName;
 
+@property (nonatomic,strong) UIImageView* profileEditbtn;
 
+@property (nonatomic, strong) void(^onPushBlock)(UIViewController*);
 
 @end
 
@@ -52,7 +56,6 @@ static BDLeftMenuView *_leftMenuView = nil;
     self = [super init];
     if (self) {
         [self setupViews];
-        
         @weakify(self);
         [RACObserve([MPProfileManager sharedManager], curUser) subscribeNext:^(MPUserProfile *newUser) {
                 @strongify(self);
@@ -84,10 +87,11 @@ static BDLeftMenuView *_leftMenuView = nil;
     return _leftMenuView;
 }
 
-+ (void)show {
++ (BDLeftMenuView*)show {
     _leftMenuView = [[BDLeftMenuView alloc] init];
     [[[UIApplication sharedApplication] keyWindow] addSubview:_leftMenuView];
     [_leftMenuView addMenuPanGesture]; // 添加拖拽手势
+    return  _leftMenuView;
 }
 
 + (void)hide {
@@ -132,6 +136,12 @@ static BDLeftMenuView *_leftMenuView = nil;
     [self.profileName mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.profileAvatar.mas_right).offset(10);
             make.centerY.equalTo(self.profileAvatar);
+    }];
+    
+    [self.profileEditbtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.profileName);
+            make.left.equalTo(self.profileName.mas_right).offset(10);
+            make.width.height.mas_equalTo(24);
     }];
     
     self.frame = UIScreenBounds;
@@ -243,11 +253,12 @@ static BDLeftMenuView *_leftMenuView = nil;
 
 - (UIView *)createMenuListViewWithFrame:(CGRect)viewFrame {
     UIView *listView = [[UIView alloc] initWithFrame:viewFrame];
-    listView.backgroundColor = [UIColor whiteColor];
+    listView.backgroundColor = MPUITheme.theme_white;
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height) style:UITableViewStylePlain];
     tableView.dataSource = self;
     tableView.delegate = self;
+    tableView.backgroundColor = MPUITheme.theme_white;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.gestureRecognizers = nil;
     [listView addSubview:tableView];
@@ -257,8 +268,8 @@ static BDLeftMenuView *_leftMenuView = nil;
     
     _userInfo = @{ @"icon": @"avatar_default", @"title": @"187****0897"};
     _menuDataList = @[
-                      @{@"type": @(1), @"icon": @"OrderBlueIcon", @"title": @"Favorites"},
-                      @{@"type": @(2), @"icon": @"ServiceBlueIcon", @"title": @"Settings"},
+                      @{@"type": @(1), @"icon": @"OrderBlueIcon", @"title": @"User Agreement"},
+                      @{@"type": @(2), @"icon": @"ServiceBlueIcon", @"title": @"Privacy Policy"},
                       @{@"type": @(2), @"icon": @"FeedbackBlueIcon", @"title": @"About"},
                       @{@"type": @(3), @"icon": @"SettingBlueIcon", @"title": @"Log Out"}
                     ];
@@ -343,17 +354,37 @@ static BDLeftMenuView *_leftMenuView = nil;
         
         __weak typeof(self) wkSelf = self;
         [_profileHeader addTapGestureWithBlock:^{
-            [wkSelf onLogin];
+            
+            if (IsUserLogin) {
+                [wkSelf hideInAnimation];
+                [wkSelf onProfileEdit];
+                
+            }else{
+                [wkSelf onLogin];
+            }
+            
         }];
     }
     return _profileHeader;;
 }
 
-
+-(UIImageView *)profileEditbtn{
+    if(_profileEditbtn == nil){
+        _profileEditbtn = [[UIImageView alloc] init];
+        _profileEditbtn.image = [UIImage imageNamed:@"profile_edit"];
+        UIImage *image = [[UIImage imageNamed:@"profile_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _profileEditbtn.image = image;
+        _profileEditbtn.tintColor = MPUITheme.mainDark;
+//        _profileEditbtn.image.tintColor = MPUITheme.mainDark;
+        [_profileHeader addSubview:_profileEditbtn];
+    }
+    return _profileEditbtn;
+}
 
 -(UILabel *)profileName{
     if(_profileName == nil){
         _profileName = [UILabel new];
+        _profileName.font = [MPUITheme font_normal:20];
     }
     return _profileName;
 }
@@ -375,7 +406,7 @@ static BDLeftMenuView *_leftMenuView = nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70;
+    return 50;
 }
 
  
@@ -388,11 +419,14 @@ static BDLeftMenuView *_leftMenuView = nil;
     NSDictionary *dict = [self.menuDataList objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:dict[@"icon"]];
     cell.textLabel.text = dict[@"title"];
+    cell.textLabel.font = [MPUITheme font_normal:18];
+    cell.textLabel.textColor = MPUITheme.contentBg;
+    cell.backgroundColor = [UIColor colorWithHexString:@"95d5b2"];
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 100;
+    return 140;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -413,7 +447,7 @@ static BDLeftMenuView *_leftMenuView = nil;
                  
                 break;
             case 2:
-                 
+                [self onAbout];
                 break;
             case 3:
                 [self onLogout];
@@ -429,6 +463,21 @@ static BDLeftMenuView *_leftMenuView = nil;
 }
 
 #pragma mark - Function
+
+- (void)onAbout{
+    MPAboutViewController* aboutVC = [MPAboutViewController new];
+    if(self.onPushBlock){
+        self.onPushBlock(aboutVC);
+    }
+}
+
+- (void)onProfileEdit{
+    MPProfileEditViewController* vc = [MPProfileEditViewController new];
+    if(self.onPushBlock){
+        self.onPushBlock(vc);
+    }
+}
+
 - (void)onLogin{
     [[MPUIManager sharedManager] showLogin];
 }
@@ -437,6 +486,10 @@ static BDLeftMenuView *_leftMenuView = nil;
     [MPProfileManager sharedManager].curUser = nil;
     [[MPProfileManager sharedManager] removeUserCache];
     [DNEHUD showMessage:@"Logout Success"];
+}
+
+- (void)setPushBlock:(void(^)(UIViewController*))block{
+    self.onPushBlock = block;
 }
 
 @end

@@ -20,6 +20,7 @@
 #define UIColorHex(_hex_)   [UIColor colorWithHexString:((__bridge NSString *)CFSTR(#_hex_))]
 #endif
 
+#define IsUserLogin MPProfileManager.sharedManager.curUser != nil
 
 #define FONTL(size) [UIFont systemFontOfSize:size]
 #define FONTM(size) [UIFont systemFontOfSize:size]

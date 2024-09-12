@@ -23,6 +23,7 @@
 		4647F1832C64FE19002CCBE3 /* MPPlayDetailListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4647F1822C64FE19002CCBE3 /* MPPlayDetailListViewController.m */; };
 		4647F1862C64FE56002CCBE3 /* MPPlayDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4647F1852C64FE56002CCBE3 /* MPPlayDetailHeaderView.m */; };
 		4647F1892C64FEBD002CCBE3 /* MPPlayDetailListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4647F1882C64FEBD002CCBE3 /* MPPlayDetailListCell.m */; };
+		464E0E8F2C9044AE00733549 /* MPAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 464E0E8E2C9044AE00733549 /* MPAboutViewController.m */; };
 		464E4B372C69E90C0004AE4C /* MusicKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464E4B362C69E90C0004AE4C /* MusicKitWrapper.swift */; };
 		464E4B392C69F7440004AE4C /* songsData_musicapi.plist in Resources */ = {isa = PBXBuildFile; fileRef = 464E4B382C69F7440004AE4C /* songsData_musicapi.plist */; };
 		464E4B3C2C6A47A00004AE4C /* MPPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 464E4B3B2C6A47A00004AE4C /* MPPlayerViewController.m */; };
@@ -45,6 +46,7 @@
 		46DBEB0C2C6C6427001E5DB8 /* BDLeftMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB0A2C6C6427001E5DB8 /* BDLeftMenuView.m */; };
 		46DBEB0F2C6CE3E3001E5DB8 /* MPPlayerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB0E2C6CE3E3001E5DB8 /* MPPlayerListViewController.m */; };
 		46DBEB122C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB112C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m */; };
+		46E9B9342C91982700919CF6 /* MPProfileEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9B9332C91982700919CF6 /* MPProfileEditViewController.m */; };
 		46F909B72C8ED14800A04F62 /* MPPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F909B62C8ED14800A04F62 /* MPPrivacyPolicyViewController.m */; };
 		46F909C42C8ED30A00A04F62 /* D9BasicAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F909B92C8ED30A00A04F62 /* D9BasicAlertView.m */; };
 		46F909C52C8ED30A00A04F62 /* D9EULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F909BB2C8ED30A00A04F62 /* D9EULAViewController.m */; };
@@ -87,6 +89,8 @@
 		4647F1852C64FE56002CCBE3 /* MPPlayDetailHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlayDetailHeaderView.m; sourceTree = "<group>"; };
 		4647F1872C64FEBD002CCBE3 /* MPPlayDetailListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlayDetailListCell.h; sourceTree = "<group>"; };
 		4647F1882C64FEBD002CCBE3 /* MPPlayDetailListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlayDetailListCell.m; sourceTree = "<group>"; };
+		464E0E8D2C9044AE00733549 /* MPAboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPAboutViewController.h; sourceTree = "<group>"; };
+		464E0E8E2C9044AE00733549 /* MPAboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPAboutViewController.m; sourceTree = "<group>"; };
 		464E4B352C69E90B0004AE4C /* MusicPlay-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MusicPlay-Bridging-Header.h"; sourceTree = "<group>"; };
 		464E4B362C69E90C0004AE4C /* MusicKitWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicKitWrapper.swift; sourceTree = "<group>"; };
 		464E4B382C69F7440004AE4C /* songsData_musicapi.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = songsData_musicapi.plist; sourceTree = "<group>"; };
@@ -130,6 +134,8 @@
 		46DBEB0E2C6CE3E3001E5DB8 /* MPPlayerListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlayerListViewController.m; sourceTree = "<group>"; };
 		46DBEB102C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+ItunesSongUrl.h"; sourceTree = "<group>"; };
 		46DBEB112C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+ItunesSongUrl.m"; sourceTree = "<group>"; };
+		46E9B9322C91982700919CF6 /* MPProfileEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPProfileEditViewController.h; sourceTree = "<group>"; };
+		46E9B9332C91982700919CF6 /* MPProfileEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPProfileEditViewController.m; sourceTree = "<group>"; };
 		46F909B52C8ED14800A04F62 /* MPPrivacyPolicyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPrivacyPolicyViewController.h; sourceTree = "<group>"; };
 		46F909B62C8ED14800A04F62 /* MPPrivacyPolicyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPrivacyPolicyViewController.m; sourceTree = "<group>"; };
 		46F909B82C8ED30A00A04F62 /* D9BasicAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = D9BasicAlertView.h; sourceTree = "<group>"; };
@@ -252,7 +258,7 @@
 		4647F1672C64EAFA002CCBE3 /* MusicPlay */ = {
 			isa = PBXGroup;
 			children = (
-				46F909B42C8ED13300A04F62 /* Otheer */,
+				46F909B42C8ED13300A04F62 /* Other */,
 				4647F1792C64EAFB002CCBE3 /* Info.plist */,
 				466F1AEB2C80B61000986AA6 /* Application */,
 				465124382C79C417005AB29D /* MusicPlay.entitlements */,
@@ -278,6 +284,15 @@
 			path = MusicPlay;
 			sourceTree = "<group>";
 		};
+		464E0E8C2C90449400733549 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				464E0E8D2C9044AE00733549 /* MPAboutViewController.h */,
+				464E0E8E2C9044AE00733549 /* MPAboutViewController.m */,
+			);
+			path = About;
+			sourceTree = "<group>";
+		};
 		4651242E2C79BC03005AB29D /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +305,8 @@
 				469812A82C7DC422003C0821 /* MPProfileManager.m */,
 				469812AA2C7DC4B2003C0821 /* MPUserProfile.h */,
 				469812AB2C7DC4B2003C0821 /* MPUserProfile.m */,
+				46E9B9322C91982700919CF6 /* MPProfileEditViewController.h */,
+				46E9B9332C91982700919CF6 /* MPProfileEditViewController.m */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -368,14 +385,15 @@
 			path = LeftMenu;
 			sourceTree = "<group>";
 		};
-		46F909B42C8ED13300A04F62 /* Otheer */ = {
+		46F909B42C8ED13300A04F62 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				464E0E8C2C90449400733549 /* About */,
 				46F909C32C8ED30A00A04F62 /* EULA */,
 				46F909B52C8ED14800A04F62 /* MPPrivacyPolicyViewController.h */,
 				46F909B62C8ED14800A04F62 /* MPPrivacyPolicyViewController.m */,
 			);
-			path = Otheer;
+			path = Other;
 			sourceTree = "<group>";
 		};
 		46F909C32C8ED30A00A04F62 /* EULA */ = {
@@ -546,6 +564,7 @@
 				46F909D02C8EEDEB00A04F62 /* MPWebViewController.m in Sources */,
 				463CC15F2C6E2CBF00993ABB /* MPAliOSSManager.m in Sources */,
 				464E4B372C69E90C0004AE4C /* MusicKitWrapper.swift in Sources */,
+				46E9B9342C91982700919CF6 /* MPProfileEditViewController.m in Sources */,
 				4647F1832C64FE19002CCBE3 /* MPPlayDetailListViewController.m in Sources */,
 				463180552C7C5925004D47DE /* MPAuthService.m in Sources */,
 				46F909C72C8ED30A00A04F62 /* D9UserAgreementAlert.m in Sources */,
@@ -562,6 +581,7 @@
 				4690F2ED2C8AEE1A006C7AF6 /* MPUITheme.m in Sources */,
 				46209C372C6B129100058334 /* MPPlaylistSectionHeader.m in Sources */,
 				46DBEB122C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m in Sources */,
+				464E0E8F2C9044AE00733549 /* MPAboutViewController.m in Sources */,
 				465124312C79BC16005AB29D /* MPLoginViewController.m in Sources */,
 				46DBEB0F2C6CE3E3001E5DB8 /* MPPlayerListViewController.m in Sources */,
 				463CC1582C6E06CC00993ABB /* DNEHUD.m in Sources */,
@@ -732,7 +752,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xes.melody;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -774,7 +794,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xes.melody;
 				PRODUCT_NAME = "$(TARGET_NAME)";

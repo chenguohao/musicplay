@@ -11,6 +11,7 @@
 #import <AuthenticationServices/AuthenticationServices.h>
 #import "MPUserProfile.h"
 #import "MPProfileManager.h"
+#import "MPNetworkManager.h"
 @interface MPAuthService()<ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding>
 @property (nonatomic,copy) void(^onResultBlock)(NSError*);
 @end
@@ -24,6 +25,12 @@
     
     self.onResultBlock = block;
     
+    
+#if TARGET_OS_SIMULATOR
+    [self onSimulatorLogin];
+    return;
+#endif
+    
     ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
     ASAuthorizationAppleIDRequest *request = [provider createRequest];
     request.requestedScopes = @[ASAuthorizationScopeFullName, ASAuthorizationScopeEmail];
@@ -34,45 +41,7 @@
     [controller performRequests];
 }
 #pragma mark - 验证服务
--(void)serververifyWithUserID:(NSString *)uid authorCode:(NSString *)code token:(NSString *)token
-{
-    NSDictionary *dict1 = [self jwtDecodeWithJwtString:token];
-    NSLog(@">>解析原始的:%@",dict1);
-    NSString* secret = [self genSecret];
-    NSDictionary *dict = @{@"client_id":@"com.xes.melody",
-                           @"code":code,
-                           @"grant_type":@"authorization_code",
-                           @"client_secret":secret};
-    AFHTTPSessionManager *manager=[AFHTTPSessionManager manager];
- 
-    [manager POST:@"https://appleid.apple.com/auth/token" parameters:dict 
-          headers:nil
-         progress:nil
-          success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"--success-->%@",responseObject);
-        NSDictionary *dict2 = [self jwtDecodeWithJwtString:[responseObject objectForKey:@"id_token"]];
-        NSLog(@">>解析请求到的:%@",dict2);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"--error-->%@",error.localizedDescription);
-    }];
-}
 
--(NSDictionary *)jwtDecodeWithJwtString:(NSString *)jwtStr {
-    NSArray * segments = [jwtStr componentsSeparatedByString:@"."];
-    NSString * base64String = [segments objectAtIndex:1];
-    int requiredLength = (int)(4 *ceil((float)[base64String length]/4.0));
-    int nbrPaddings = requiredLength - (int)[base64String length];
-    if(nbrPaddings > 0){
-        NSString * pading = [[NSString string] stringByPaddingToLength:nbrPaddings withString:@"=" startingAtIndex:0];
-        base64String = [base64String stringByAppendingString:pading];
-    }
-    base64String = [base64String stringByReplacingOccurrencesOfString:@"-" withString:@"+"];
-    base64String = [base64String stringByReplacingOccurrencesOfString:@"_" withString:@"/"];
-    NSData * decodeData = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
-    NSString * decodeString = [[NSString alloc] initWithData:decodeData encoding:NSUTF8StringEncoding];
-    NSDictionary * jsonDict = [NSJSONSerialization JSONObjectWithData:[decodeString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-    return jsonDict;
-}
 
 // ASAuthorizationControllerDelegate method
 - (void)authorizationController:(ASAuthorizationController *)controller didCompleteWithAuthorization:(ASAuthorization *)authorization {
@@ -103,20 +72,38 @@
     }
 }
 
+- (void)onSimulatorLogin{
+    NSDictionary *postData = @{
+              @"authorizationCode": @"c905018ad7f4c451b87cec842e3a8aa7c.0.srwr.7o7tf4OmoYoWyPdb2A6rGQ",
+              @"userID": @"000161.a0c7369de65243fc88265540a03091ea.0324",
+              @"email": @"xes@test.com",
+              @"fullName": @"Xes",
+              @"idToken": @"eyJraWQiOiJwZ2duUWVOQ09VIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLnhlcy5tZWxvZHkiLCJleHAiOjE3MjYxMzEwNjUsImlhdCI6MTcyNjA0NDY2NSwic3ViIjoiMDAwMTYxLmEwYzczNjlkZTY1MjQzZmM4ODI2NTU0MGEwMzA5MWVhLjAzMjQiLCJjX2hhc2giOiJkZ18tdXhiOWItVjNoZmRObHRjSmtRIiwiZW1haWwiOiJjaGVuZ3VvaGFveEBzaW5hLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdXRoX3RpbWUiOjE3MjYwNDQ2NjUsIm5vbmNlX3N1cHBvcnRlZCI6dHJ1ZX0.PGOTui0n-bDQ9iFATZXs4KWBjGUiL-crKBff_zSjsg9ifCs8KI5gc6mnxx3v7hhUG9kxqTjY6zZBiGTDKcXmmcCTNnZjz2NyTlYcDF2N6rHNsLYW7G9wtBLLQKfpnWJX4jkh8eSUCkBRBRKdHKZ8Mf4ZEvOvXgYgml_hSoA_dHQGv_H9fWbQrInEDmGNxPEWfzoOUwSqPvyf--mQML1xTzOX8HJNwcmz8phjQlPBb2GTjuQHqDc0fzkZFU5TXpVMCj3tJ_QZwS-O2YdrJtiVUY6hUHz12AM1P6H0kFsBj_lMS0d4CPUgB1i6QTjSOqwZd33WVqK55zopX2MnBg8Gnw"
+          };
+    // 在这里可以发送凭证到后端进行进一步验证
+    [self requestLogin:postData];
+}
 
 - (void)requestLogin:(NSDictionary*)params{
-    NSString *urlString = @"http://192.168.1.221:8011/v1/appleSign";
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        manager.requestSerializer = [AFJSONRequestSerializer serializer];
-        manager.responseSerializer = [AFJSONResponseSerializer serializer];
 
-        [manager POST:urlString parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            NSLog(@"Response: %@", responseObject);
-            
+    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/appleSign"
+                                               Params:params
+                                           Completion:^(id responseObject, NSError * err) {
+        NSLog(@"Response: %@", responseObject);
+        
+        if(err){
+            if(self.onResultBlock){
+                self.onResultBlock(err);
+            }
+        }else{
             if([responseObject[@"code"] intValue] != 0){
-                int oo = responseObject[@"code"];
+                int oo = [responseObject[@"code"] intValue];
+                NSError* error = [NSError errorWithDomain:@"com.xes.Melodie" code:oo userInfo:@{@"msg":responseObject[@"msg"]}];
+                if(self.onResultBlock){
+                    self.onResultBlock(error);
+                }
             }else{
-                NSDictionary* userdic = responseObject[@"data"];
+                NSDictionary* userdic = responseObject;
                 MPUserProfile *user = [MTLJSONAdapter modelOfClass:MPUserProfile.class fromJSONDictionary:userdic error:nil];
                 [MPProfileManager sharedManager].curUser = user;
                 [[MPProfileManager sharedManager] cacheUserProfile:user];
@@ -128,10 +115,11 @@
             if(self.onResultBlock){
                 self.onResultBlock(nil);
             }
-            
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            NSLog(@"Error: %@", error);
-        }];
+        }
+    }];
+    
+    
+    
 }
 
 // ASAuthorizationControllerDelegate method

@@ -38,4 +38,12 @@
     return [UIColor colorWithHexString:@"D8F3DC"];
 }
 
++ (UIFont*)font_normal:(CGFloat)size{
+    return [UIFont fontWithName:@"AppleSDGothicNeo" size:size];
+}
+
++ (UIFont*)font_bold:(CGFloat)size{
+    return [UIFont fontWithName:@"AppleSDGothicNeo-Bold" size:size];
+}
+
 @end
