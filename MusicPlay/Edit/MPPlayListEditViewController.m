@@ -92,8 +92,8 @@
     // Add Song Button
     self.addSongButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.addSongButton setTitle:@"Add Song" forState:UIControlStateNormal];
-    self.addSongButton.backgroundColor = UIColor.blueColor;
-    [self.addSongButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    self.addSongButton.backgroundColor = MPUITheme.contentBg;
+    [self.addSongButton setTitleColor:MPUITheme.contentText forState:UIControlStateNormal];
     self.addSongButton.layer.cornerRadius = 25;
     [self.addSongButton addTarget:self  action:@selector(onAdd) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.addSongButton];

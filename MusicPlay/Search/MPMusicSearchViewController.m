@@ -36,11 +36,7 @@
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
     
-    self.cancelBtn = [UIButton new];
-    [self.cancelBtn setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-    [self.cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
-    [self.cancelBtn addTarget:self action:@selector(onDismiss) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.cancelBtn];
+   
     
     // 初始化搜索结果数组
     self.searchResults = @[]; // 初始为空
@@ -59,17 +55,17 @@
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
         make.left.equalTo(self.view);
-        make.right.equalTo(self.view).offset(-100);
+        make.right.equalTo(self.view) ;
         make.height.mas_equalTo(44);
     }];
     
     
-    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.searchBar.mas_right);
-            make.top.equalTo(self.searchBar);
-            make.right.equalTo(self.view);
-            make.bottom.equalTo(self.searchBar);
-        }];
+//    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(self.searchBar.mas_right);
+//            make.top.equalTo(self.searchBar);
+//            make.right.equalTo(self.view);
+//            make.bottom.equalTo(self.searchBar);
+//        }];
     
     // 布局表格视图
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -83,6 +79,10 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     // 当搜索栏中的文本改变时，触发搜索操作
     [self searchForText:searchText];
+}
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self onDismiss];
 }
 
 - (void)searchForText:(NSString *)searchText {
@@ -104,6 +104,8 @@
     [self.searchWrapper searchForSongsWithQuery:query completion:block ];
      
 }
+
+
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
 

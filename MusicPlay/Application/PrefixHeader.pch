@@ -14,13 +14,14 @@
 #import "DNEHUD.h"
 #import "Masonry.h"
 #import "UIButton+BgImg.h"
+#import "MPProfileManager.h"
 #define CustomLocalizedString(key, comment) NSLocalizedString(key, comment)
 
 #ifndef UIColorHex
 #define UIColorHex(_hex_)   [UIColor colorWithHexString:((__bridge NSString *)CFSTR(#_hex_))]
 #endif
 
-#define IsUserLogin MPProfileManager.sharedManager.curUser != nil
+#define IsUserLogin (MPProfileManager.sharedManager.curUser != nil)
 
 #define FONTL(size) [UIFont systemFontOfSize:size]
 #define FONTM(size) [UIFont systemFontOfSize:size]
