@@ -375,7 +375,6 @@ static BDLeftMenuView *_leftMenuView = nil;
         UIImage *image = [[UIImage imageNamed:@"profile_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _profileEditbtn.image = image;
         _profileEditbtn.tintColor = MPUITheme.mainDark;
-//        _profileEditbtn.image.tintColor = MPUITheme.mainDark;
         [_profileHeader addSubview:_profileEditbtn];
     }
     return _profileEditbtn;

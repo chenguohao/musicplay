@@ -15,6 +15,7 @@
 #import "Masonry.h"
 #import "UIButton+BgImg.h"
 #import "MPProfileManager.h"
+#import "MPUserProfile.h"
 #define CustomLocalizedString(key, comment) NSLocalizedString(key, comment)
 
 #ifndef UIColorHex

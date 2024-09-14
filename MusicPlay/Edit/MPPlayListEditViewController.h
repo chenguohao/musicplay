@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MPPlayListEditViewController : UIViewController
 - (void)setupInfo:(NSDictionary*)info;
 - (void)showCreatePlaylistAlert:(UIViewController*)viewController
+                       isCreate:(BOOL)isCreate
                        onCreate:(void(^)(NSString*))block;
 @end
 

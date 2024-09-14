@@ -5,6 +5,9 @@
 #import "MPPlayDetailListCell.h"
 #import "MPPlaylistService.h"
 #import "DNEHUD.h"
+#import "SDWebImage/SDWebImage.h"
+#import "TZImagePickerController.h"
+#import "UIView+TapGesture.h"
 @interface MPPlayListEditViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UIView *headerView;
@@ -20,9 +23,11 @@
 
 @property (nonatomic,strong) NSMutableArray* playlistItems;
 @property (nonatomic,strong) UIImageView* avatar;
+@property (nonatomic,strong) UIImageView* avatarEdit;
 @property (nonatomic,strong) MPPlaylistService* service;
 @property (nonatomic,strong) UILabel* createAt;
-
+@property (nonatomic,assign) BOOL isAvatarUpdate;
+@property (nonatomic,strong) UIImageView* titleEdit;
 @end
 
 @implementation MPPlayListEditViewController
@@ -60,7 +65,14 @@
     self.playlistCover = [[UIImageView alloc] init];
     self.playlistCover.backgroundColor = [UIColor lightGrayColor]; // Placeholder color
     self.playlistCover.image = [UIImage imageNamed:@"cover_default"];
+    self.playlistCover.layer.cornerRadius = 20;
+    self.playlistCover.clipsToBounds = YES;
+    self.playlistCover.userInteractionEnabled = YES;
     [self.headerView addSubview:self.playlistCover];
+    __weak typeof(self) wkSelf = self;
+    [self.playlistCover addTapGestureWithBlock:^{
+        [wkSelf onCover];
+    }];
     
     self.playlistNameLabel = [[UILabel alloc] init];
     @weakify(self);
@@ -68,16 +80,36 @@
         @strongify(self);
         self.playlistNameLabel.text = newTitle;
     }];
+    self.playlistNameLabel.userInteractionEnabled = YES;
+    [self.playlistNameLabel addTapGestureWithBlock:^{
+        [wkSelf onTitle];
+    }];
+    
+    self.titleEdit = [UIImageView new];
+    UIImage *image = [[UIImage imageNamed:@"profile_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.titleEdit.image = image;
+    self.titleEdit.tintColor = MPUITheme.mainDark;
+    [self.headerView addSubview:self.titleEdit];
+    self.titleEdit.userInteractionEnabled = YES;
+    [self.titleEdit addTapGestureWithBlock:^{
+        [wkSelf onTitle];
+    }];
+    
     [self.headerView addSubview:self.playlistNameLabel];
     
     self.userNameLabel = [[UILabel alloc] init];
     self.userNameLabel.font = [UIFont systemFontOfSize:12];
     self.userNameLabel.textColor = UIColor.grayColor;
-    self.userNameLabel.text = @"UserName";
+    self.userNameLabel.text = MPProfileManager.sharedManager.curUser.name;
     [self.headerView addSubview:self.userNameLabel];
     
     self.createdAtLabel = [[UILabel alloc] init];
-    self.createdAtLabel.text = @"Created at 2024-09-04";
+    
+    NSDateFormatter* formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy-MM-dd";
+    NSDate* now = [NSDate date];
+    NSString* nowStr = [formatter stringFromDate:now];
+    self.createdAtLabel.text = [NSString stringWithFormat:@"Created at %@",nowStr];
     self.createdAtLabel.font = [UIFont systemFontOfSize:12];
     self.createdAtLabel.textColor = UIColor.grayColor;
     [self.headerView addSubview:self.createdAtLabel];
@@ -97,6 +129,20 @@
     self.addSongButton.layer.cornerRadius = 25;
     [self.addSongButton addTarget:self  action:@selector(onAdd) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.addSongButton];
+    
+    self.avatar = [UIImageView new];
+    [self.avatar sd_setImageWithURL:[NSURL URLWithString:MPProfileManager.sharedManager.curUser.avatar] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+    self.avatar.layer.cornerRadius = 10;
+    self.avatar.clipsToBounds = YES;
+    self.avatar.userInteractionEnabled = YES;
+    
+   
+    [self.headerView addSubview:self.avatar];
+    
+    self.avatarEdit = [UIImageView new];
+    self.avatarEdit.image = [UIImage imageNamed:@"avatar_edit"];
+   
+    [self.headerView addSubview:self.avatarEdit];
 }
 
 - (void)setupConstraints {
@@ -118,13 +164,31 @@
         make.top.equalTo(self.playlistCover);
     }];
     
-    [self.userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.titleEdit mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.playlistNameLabel);
+            make.left.equalTo(self.playlistNameLabel.mas_right).offset(10);
+            make.width.height.mas_equalTo(20);
+    }];
+    
+    [self.avatar mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.playlistNameLabel);
             make.top.equalTo(self.playlistNameLabel.mas_bottom).offset(10);
+            make.height.width.mas_equalTo(20);
+    }];
+    
+    [self.avatarEdit mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.playlistCover);
+            make.bottom.equalTo(self.playlistCover);
+            make.width.height.mas_equalTo(20);
+    }];
+    
+    [self.userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.avatar.mas_right).mas_offset(10);
+            make.centerY.equalTo(self.avatar);
     }];
     
     [self.createdAtLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.userNameLabel);
+            make.left.equalTo(self.playlistNameLabel);
             make.top.equalTo(self.userNameLabel.mas_bottom).offset(10);
     }];
    
@@ -183,17 +247,48 @@
     }];
 }
 
+- (void)onCover{
+    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+    [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+        
+        UIImage* image = photos[0];
+        self.playlistCover.image = image;
+        self.isAvatarUpdate = YES;
+      
+    }];
+    imagePickerVc.modalPresentationStyle = UIModalPresentationFullScreen;
+    CGFloat kScreenHeight = [UIScreen mainScreen].bounds.size.height;
+    CGFloat kScreenWidth  = [UIScreen mainScreen].bounds.size.width;
+    imagePickerVc.cropRect = CGRectMake(0,(kScreenHeight - kScreenWidth) / 2, kScreenWidth, kScreenWidth);
+    imagePickerVc.allowCrop = YES;
+    imagePickerVc.allowPickingVideo = NO;
+    [self presentViewController:imagePickerVc animated:YES completion:nil];
+}
+
+
+- (void)onTitle{
+    [self showCreatePlaylistAlert:self isCreate:NO onCreate:^(NSString * newTitle){
+        self.playTitle = newTitle;
+    }];
+}
+
 #pragma mark -
 - (void)showCreatePlaylistAlert:(UIViewController*)viewController
+                       isCreate:(BOOL)isCreate
                        onCreate:(void(^)(NSString*))block{
     // 创建UIAlertController
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"New Playlist"
+    NSString* title = isCreate?@"New Playlist":@"Playlist Edit";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
                                                                              message:@"Enter a name for your playlist"
                                                                       preferredStyle:UIAlertControllerStyleAlert];
 
     // 添加TextField到Alert
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"Playlist Name";
+        if(self.playTitle.length && !isCreate){
+            textField.text = self.playTitle;
+        }
+        
     }];
 
     // 创建"Cancel"按钮

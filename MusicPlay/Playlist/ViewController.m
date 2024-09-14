@@ -115,77 +115,92 @@
 }
 
 - (void)onAdd{
+    
+//    if(!IsUserLogin){
+//        [[MPUIManager sharedManager] showLogin];
+//    }else{
+//        MPPlayListEditViewController * editVC = [MPPlayListEditViewController new];
+//        [editVC showCreatePlaylistAlert:self
+//                               onCreate:^(NSString * title) {
+//            NSDictionary* info = @{@"title":title};
+//            [editVC setupInfo:info];
+//            [self.navigationController pushViewController:editVC animated:YES];
+//        }];
+//    //
+//    }
+    
+    
     MPPlayListEditViewController * editVC = [MPPlayListEditViewController new];
     NSString* t = @"111";
     NSMutableDictionary* info = @{@"title":t};
     [editVC setupInfo:info];
     [self.navigationController pushViewController:editVC animated:YES];
     return;;
-    
-    
-    
-    [editVC showCreatePlaylistAlert:self
-                           onCreate:^(NSString * title) {
-        NSMutableDictionary* info = @{@"title":title};
-        [editVC setupInfo:info];
-        [self.navigationController pushViewController:editVC animated:YES];
-    }];
+//    
+//    
+//    
+//    [editVC showCreatePlaylistAlert:self
+//                           onCreate:^(NSString * title) {
+//        NSMutableDictionary* info = @{@"title":title};
+//        [editVC setupInfo:info];
+//        [self.navigationController pushViewController:editVC animated:YES];
+//    }];
+////
+//    
+//    return;
+//    NSDictionary* item = self.models[0];
+//    
+//    NSString* title = item[@"title"];
+//    NSString* cover = item[@"coverUrl"];
+//    NSArray* playlist = item[@"playlist"];
+//    
+//    [DNEHUD showLoading:@""];
+//    [self.service createPlaylistWithTitle:title Cover:cover PlayItems:playlist Result:^(NSError * err) {
+//        [DNEHUD hideHUD];
+//        
+//        if(err == nil){
+//            [DNEHUD showMessage:@"success"];
+//            
+//           
+//            
+//            
+//        }else{
+//            [DNEHUD showMessage:@"fail"];
+//        }
+//        
+//    }];
+//    return;
+//    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+//    [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+//        
+//        UIImage* image = photos[0];
+//        NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
 //
-    
-    return;
-    NSDictionary* item = self.models[0];
-    
-    NSString* title = item[@"title"];
-    NSString* cover = item[@"coverUrl"];
-    NSArray* playlist = item[@"playlist"];
-    
-    [DNEHUD showLoading:@""];
-    [self.service createPlaylistWithTitle:title Cover:cover PlayItems:playlist Result:^(NSError * err) {
-        [DNEHUD hideHUD];
-        
-        if(err == nil){
-            [DNEHUD showMessage:@"success"];
-            
-           
-            
-            
-        }else{
-            [DNEHUD showMessage:@"fail"];
-        }
-        
-    }];
-    return;
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
-    [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
-        
-        UIImage* image = photos[0];
-        NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
-
-//        NSData *imageData = UIImagePNGRepresentation(image);
-        
-       
-        [DNEHUD showLoading:@"uploading"];
-        [[MPAliOSSManager sharedManager] uploadData:imageData withBlock:^(NSString * url, NSError * err) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [DNEHUD hideHUD];
-                if(err){
-                    [DNEHUD showMessage:err.description];
-                }else{
-                    [DNEHUD showMessage:@"Upload Success"];
-                    NSLog(@"url %@",url);
-                }
-            });
-          
-            
-        }];
-    }];
-    imagePickerVc.modalPresentationStyle = UIModalPresentationFullScreen;
-    CGFloat kScreenHeight = [UIScreen mainScreen].bounds.size.height;
-    CGFloat kScreenWidth  = [UIScreen mainScreen].bounds.size.width;
-    imagePickerVc.cropRect = CGRectMake(0,(kScreenHeight - kScreenWidth) / 2, kScreenWidth, kScreenWidth);
-    imagePickerVc.allowCrop = YES;
-    imagePickerVc.allowPickingVideo = NO;
-    [self presentViewController:imagePickerVc animated:YES completion:nil];
+////        NSData *imageData = UIImagePNGRepresentation(image);
+//        
+//       
+//        [DNEHUD showLoading:@"uploading"];
+//        [[MPAliOSSManager sharedManager] uploadData:imageData withBlock:^(NSString * url, NSError * err) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [DNEHUD hideHUD];
+//                if(err){
+//                    [DNEHUD showMessage:err.description];
+//                }else{
+//                    [DNEHUD showMessage:@"Upload Success"];
+//                    NSLog(@"url %@",url);
+//                }
+//            });
+//          
+//            
+//        }];
+//    }];
+//    imagePickerVc.modalPresentationStyle = UIModalPresentationFullScreen;
+//    CGFloat kScreenHeight = [UIScreen mainScreen].bounds.size.height;
+//    CGFloat kScreenWidth  = [UIScreen mainScreen].bounds.size.width;
+//    imagePickerVc.cropRect = CGRectMake(0,(kScreenHeight - kScreenWidth) / 2, kScreenWidth, kScreenWidth);
+//    imagePickerVc.allowCrop = YES;
+//    imagePickerVc.allowPickingVideo = NO;
+//    [self presentViewController:imagePickerVc animated:YES completion:nil];
 }
 
 - (NSArray*)fetchData{
