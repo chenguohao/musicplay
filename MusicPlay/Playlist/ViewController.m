@@ -421,12 +421,18 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    NSArray* playlist = self.models[indexPath.section].items;
+    MPPlaylistModel* model = self.models[indexPath.section];
+    NSArray* playlist = model.items;
     
     
     
     [[MPGlobalPlayerManager globalManager] playWithIndex:indexPath.row playList:playlist];
+    
+    [self.service addPlayCount:model.playlistID Result:^(BOOL isAdd,NSError * err) {
+        if(isAdd){
+            model.playCount += 1;
+        }
+    }];
 }
 
 @end

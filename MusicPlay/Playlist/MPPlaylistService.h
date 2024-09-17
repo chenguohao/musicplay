@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
           PlaylistID:(int)playlistID
               Result:(void(^)(NSError*))result;
 
+- (void)addPlayCount:(int)playlistID
+              Result:(void(^)(BOOL isAdd,NSError*))result;
+
 @end
 
 NS_ASSUME_NONNULL_END

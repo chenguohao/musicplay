@@ -79,4 +79,20 @@
         }
     }];
 }
+
+
+- (void)addPlayCount:(int)playlistID
+              Result:(void(^)(BOOL isAdd,NSError*))result{
+    NSMutableDictionary* mdic = [NSMutableDictionary new];
+    [mdic setObject:@(playlistID) forKey:@"target_id"];
+    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/addPlayCount"
+                                               Params:mdic
+                                           Completion:^(NSDictionary* info, NSError * err) {
+        BOOL isAdd = false;
+        isAdd = [info[@"isAdd"] boolValue];
+        if(result){
+            result(isAdd,err);
+        }
+    }];
+}
 @end

@@ -102,7 +102,7 @@
     [self.cardView addSubview:self.playNumLabel];
     
     self.likeBtn = [UIButton new];
-    self.likeBtn.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
+    self.likeBtn.backgroundColor = [UIColor colorWithWhite:1 alpha:0];
     [self.likeBtn addTarget:self action:@selector(onLike) forControlEvents:UIControlEventTouchUpInside];
     [self.cardView addSubview:self.likeBtn];
     
@@ -230,6 +230,11 @@
     [RACObserve(self.model, likeCount) subscribeNext:^(NSString *newTitle) {
         @strongify(self);
         self.likeNumLabel.text = @(self.model.likeCount).stringValue;
+    }];
+    
+    [RACObserve(self.model, playCount) subscribeNext:^(NSString *newTitle) {
+        @strongify(self);
+        self.playNumLabel.text = @(self.model.playCount).stringValue;
     }];
     
 //    NSString *detail = dict[@"likenum"];
