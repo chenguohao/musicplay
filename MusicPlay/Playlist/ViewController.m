@@ -320,7 +320,7 @@
     
     UIAlertAction *hideUserAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
          
-        [self onDelete];
+        [self onDelete:model];
     }];
     [sheets addAction:hideUserAction];
     [[MPUIManager.sharedManager getCurrentViewController] presentViewController:sheets animated:YES completion:nil];
@@ -336,9 +336,45 @@
     return;;
 }
 
-- (void)onDelete{
-    
+- (void)onDelete:(MPPlaylistModel*)model{
+    // 创建UIAlertController
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Playlist"
+                                                                             message:@"Are you sure you want to delete this playlist? This action cannot be undone."
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+
+    // 创建"OK"按钮
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Delete"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+        // 点击"OK"按钮后的操作
+        NSLog(@"OK Button Pressed");
+        [self.service deletePlaylistWithPlaylistID:model.playlistID 
+                                            Result:^(NSError * err) {
+            if(err){
+                [DNEHUD showMessage:err.description];
+            }else{
+                [DNEHUD showMessage:@"Delete Success"];
+                [self refreshList];
+            }
+        }];
+    }];
+
+    // 创建"Cancel"按钮
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+        // 点击"Cancel"按钮后的操作
+        NSLog(@"Cancel Button Pressed");
+    }];
+
+    // 将按钮添加到UIAlertController
+    [alertController addAction:okAction];
+    [alertController addAction:cancelAction];
+
+    // 显示UIAlertController
+    [self presentViewController:alertController animated:YES completion:nil];
 }
+
 
 - (void)reportWithContentID:(int)contentID
                      UserID:(int)userID{

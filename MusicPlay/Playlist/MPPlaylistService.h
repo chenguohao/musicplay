@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updatePlaylistWithModel:(MPPlaylistModel*)model
                          Result:(void(^)(NSError*))result;
 
+- (void)deletePlaylistWithPlaylistID:(int)playlistID
+                         Result:(void(^)(NSError*))result;
+
 - (void)getPlaylistWithPage:(int)index
                        Size:(int)size
                      Result:(void(^)(NSArray*))result;

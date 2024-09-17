@@ -37,6 +37,17 @@
     }];
 }
 
+- (void)deletePlaylistWithPlaylistID:(int)playlistID
+                              Result:(void(^)(NSError*))result{
+    NSDictionary* param = @{@"playlist_id":@(playlistID)};
+    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/deletePlaylist"
+                                               Params:param
+                                           Completion:^(NSDictionary * dict, NSError * err) {
+        if(result){
+            result(err);
+        }
+    }];
+}
 
 
 - (void)getPlaylistWithPage:(int)index
