@@ -2,6 +2,7 @@
 #import "Masonry.h"
 #import "UIImageView+WebCache.h" // Assuming you are using SDWebImage for loading images
 #import "MPPlayDetailListCell.h"
+#import "MPPlaylistModel.h"
 @interface MPPlaylistSectionHeader()
 
 @property (nonatomic, strong) UIImageView *coverImageView;
@@ -17,9 +18,11 @@
 @property (nonatomic, strong) UIView* containerView;
 @property (nonatomic, strong) UIView* bottomView;
 @property (nonatomic,strong) UITableView* tableView;
-@property (nonatomic, strong) NSDictionary* infoDict;
 @property (nonatomic, strong) UIButton* moreBtn;
+@property (nonatomic,strong) UIImageView* avatarIcon;
+@property (nonatomic,strong) UIButton* likeBtn;
 @property (nonatomic,copy) void(^onMoreBlock)(void);
+@property (nonatomic,copy) void(^onLikeBlock)(BOOL);
 @end
 
 @implementation MPPlaylistSectionHeader
@@ -32,6 +35,8 @@
         
         self.clipsToBounds = YES;
         self.containerView.clipsToBounds = YES;
+        
+        
     }
     return self;
 }
@@ -58,6 +63,11 @@
     self.nameLabel.textColor = MPUITheme.contentText;
     [self.cardView addSubview:self.nameLabel];
     
+    self.avatarIcon = [UIImageView new];
+    self.avatarIcon.layer.cornerRadius = 10;
+    self.avatarIcon.clipsToBounds = YES;
+    [self.cardView addSubview:self.avatarIcon];
+    
     self.artNameLabel = [[UILabel alloc] init];
     self.artNameLabel.font = [UIFont systemFontOfSize:12];
     self.artNameLabel.textColor = MPUITheme.contentText_semi;
@@ -70,20 +80,35 @@
     
     self.iconLike = [[UIImageView alloc] init];
     self.iconLike.image = [UIImage imageNamed:@"icon_like_off"];
+    self.iconLike.tintColor =MPUITheme.contentText;
     [self.cardView addSubview:self.iconLike];
     
     self.likeNumLabel = [UILabel new];
+    self.likeNumLabel.textColor = MPUITheme.contentText;
+    self.likeNumLabel.font = [MPUITheme font_normal:16];
     [self.cardView addSubview:self.likeNumLabel];
     
     
     self.iconPlay = [UIImageView new];
-    self.iconPlay.image = [UIImage imageNamed:@"icon_played"];
+    UIImage *image = [[UIImage imageNamed:@"icon_played"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+    self.iconPlay.image = image;
+    self.iconPlay.tintColor = MPUITheme.contentText;
     [self.cardView addSubview:self.iconPlay];
     
     self.playNumLabel = [UILabel new];
+    self.playNumLabel.textColor = MPUITheme.contentText;
+    self.playNumLabel.font = [MPUITheme font_normal:16];
     [self.cardView addSubview:self.playNumLabel];
     
+    self.likeBtn = [UIButton new];
+    self.likeBtn.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
+    [self.likeBtn addTarget:self action:@selector(onLike) forControlEvents:UIControlEventTouchUpInside];
+    [self.cardView addSubview:self.likeBtn];
+    
+    
     self.moreBtn = [UIButton new];
+    [self.cardView addSubview:self.moreBtn];
 
     UIImage *originalImage = [UIImage imageNamed:@"nav_more_28"];
     UIImage *tintedImage = [originalImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -138,11 +163,16 @@
         make.left.equalTo(self.coverImageView.mas_right).offset(10);
         make.right.equalTo(self.cardView).offset(-10);
     }];
+    
+    [self.avatarIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.nameLabel.mas_left);
+            make.top.equalTo(self.nameLabel.mas_bottom).offset(5);
+            make.width.height.mas_equalTo(20);
+    }];
 
     [self.artNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.nameLabel.mas_left);
-        make.top.equalTo(self.nameLabel.mas_bottom).offset(5);
-        make.right.equalTo(self.cardView).offset(-10);
+        make.left.equalTo(self.avatarIcon.mas_right).offset(5);
+        make.centerY.equalTo(self.avatarIcon);
     }];
     
     [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -150,7 +180,6 @@
         make.top.equalTo(self.artNameLabel.mas_bottom).offset(10);
         make.right.equalTo(self.cardView).offset(-10);
     }];
-    
     
     [self.playNumLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.cardView).offset(-10);
@@ -164,6 +193,8 @@
             make.right.equalTo(self.playNumLabel.mas_left).offset(-5);
     }];
     
+    
+    
     [self.likeNumLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.iconPlay.mas_left).offset(-10);
             make.centerY.equalTo(self.iconPlay);
@@ -175,22 +206,41 @@
         make.centerY.equalTo(self.likeNumLabel);
         make.width.height.equalTo(@(20));
     }];
+    
+    [self.likeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.iconLike);
+            make.top.equalTo(self.iconPlay);
+            make.right.equalTo(self.likeNumLabel);
+            make.bottom.equalTo(self.likeNumLabel);
+    }];
 }
 
-- (void)configureWithDictionary:(NSDictionary *)dict
+- (void)configureWithModel:(MPPlaylistModel *)model
                           index:(NSInteger)index {
-    self.infoDict = dict;
-    NSString *coverUrl = dict[@"cover_url"];
-    NSString *name = dict[@"title"];
-    NSString *artName = dict[@"artistname"];
-//    NSString *detail = dict[@"likenum"];
-    self.likeNumLabel.text = [dict[@"likenum"] stringValue];
-    self.playNumLabel.text =[dict[@"playnum"] stringValue];
-    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:coverUrl] placeholderImage:[UIImage imageNamed:@"cover_default"]];
-
-    self.nameLabel.text = name;
-    self.artNameLabel.text = [NSString stringWithFormat:@"by %@", artName];
+    self.model = model;
     
+    @weakify(self);
+    [RACObserve(self.model, isLiked) subscribeNext:^(NSString *newTitle) {
+        @strongify(self);
+        NSString* name = self.model.isLiked?@"icon_like_on":@"icon_like_off";
+        UIImage *image = [[UIImage imageNamed:name] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.iconLike.image = image;
+    }];
+    
+    [RACObserve(self.model, likeCount) subscribeNext:^(NSString *newTitle) {
+        @strongify(self);
+        self.likeNumLabel.text = @(self.model.likeCount).stringValue;
+    }];
+    
+//    NSString *detail = dict[@"likenum"];
+    self.likeNumLabel.text = @(self.model.likeCount).stringValue;
+    self.playNumLabel.text = @(self.model.playCount).stringValue;
+    [self.coverImageView sd_setImageWithURL:[NSURL URLWithString:self.model.coverUrl] placeholderImage:[UIImage imageNamed:@"cover_default"]];
+
+    self.nameLabel.text = self.model.title;
+    self.artNameLabel.text = self.model.user.name;
+    
+    [self.avatarIcon sd_setImageWithURL:[NSURL URLWithString:model.user.avatar] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     
     if (index % 2 == 0) {
         if(index == 0){
@@ -207,14 +257,18 @@
         self.cardView.backgroundColor = MPUITheme.contentBg_semi;
         self.bottomView.backgroundColor = MPUITheme.contentBg_semi;
     }
-    CGFloat newHeight = 60*((NSArray*)self.infoDict[@"playlist"]).count;
+    CGFloat newHeight = 60*(self.model.items).count;
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.cardView.mas_bottom).offset(5);
         make.left.equalTo(self.containerView).offset(10);
         make.right.equalTo(self.containerView).offset(-10);
         make.height.equalTo(@(newHeight));
     }];
-    
+//    model.isLiked = NO;
+ 
+    NSString* name = model.isLiked?@"icon_like_on":@"icon_like_off";
+    UIImage *image = [[UIImage imageNamed:name] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.iconLike.image = image;
 //    self.detailLabel.text = detail;
 }
 
@@ -224,7 +278,15 @@
     }
 }
 
+- (void)onLike{
+    self.onLikeBlock(!self.model.isLiked);
+}
+
 - (void)setMoreAction:(void(^)(void))block{
     self.onMoreBlock = block;
+}
+
+- (void)setLikeAvtion:(void(^)(BOOL))block{
+    self.onLikeBlock = block;
 }
 @end

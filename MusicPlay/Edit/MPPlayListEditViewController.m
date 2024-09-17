@@ -8,13 +8,14 @@
 #import "SDWebImage/SDWebImage.h"
 #import "TZImagePickerController.h"
 #import "UIView+TapGesture.h"
-@interface MPPlayListEditViewController ()<UITableViewDelegate,UITableViewDataSource>
+#import "MPPlaylistModel.h"
+#import "MPAliOSSManager.h"
+@interface MPPlayListEditViewController ()<UITableViewDelegate,UITableViewDataSource,UITableViewDragDelegate>
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *addSongButton;
-@property (nonatomic,strong) NSString* playTitle;
-@property (nonatomic,strong) NSString* playCoverUrl;
+
 @property (nonatomic,assign) long createTime;
 @property (nonatomic,strong) UILabel *playlistNameLabel;
 @property (nonatomic,strong) UILabel *userNameLabel;
@@ -28,9 +29,29 @@
 @property (nonatomic,strong) UILabel* createAt;
 @property (nonatomic,assign) BOOL isAvatarUpdate;
 @property (nonatomic,strong) UIImageView* titleEdit;
+@property (nonatomic,strong) MPPlaylistModel* model;
 @end
 
 @implementation MPPlayListEditViewController
+
+-(instancetype)init{
+    self = [super init];
+    self.model = [MPPlaylistModel init];
+    return self;
+}
+
+- (instancetype)initWithModel:(MPPlaylistModel*)model{
+    self = [super init];
+    self.model = model;
+    if(self.model.items.count){
+        self.playlistItems = [NSMutableArray arrayWithArray:self.model.items];
+    }else{
+        self.playlistItems = [NSMutableArray new];
+    }
+    
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -76,7 +97,7 @@
     
     self.playlistNameLabel = [[UILabel alloc] init];
     @weakify(self);
-    [RACObserve(self, playTitle) subscribeNext:^(NSString *newTitle) {
+    [RACObserve(self.model, title) subscribeNext:^(NSString *newTitle) {
         @strongify(self);
         self.playlistNameLabel.text = newTitle;
     }];
@@ -117,8 +138,11 @@
     // Table View
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     [self.tableView registerClass:[MPPlayDetailListCell class] forCellReuseIdentifier:@"MPPlayDetailListCell"];
+    self.tableView.dragInteractionEnabled = YES;
+    self.tableView.dragDelegate = self;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.editing = YES;
     [self.view addSubview:self.tableView];
     
     // Add Song Button
@@ -209,12 +233,6 @@
     }];
 }
 
-- (void)setupInfo:(NSDictionary*)info{
-    self.playTitle = info[@"title"];
-    if([[info allKeys] containsObject:@"url"]){
-        self.playCoverUrl = info[@"url"];
-    }
-}
 
 - (void)onAdd{
     MPMusicSearchViewController* searchVc = [MPMusicSearchViewController new];
@@ -230,21 +248,57 @@
 }
 
 - (void)onSave{
-    [DNEHUD showLoading:@"Uploading..."];
-    [self.service createPlaylistWithTitle:self.playTitle Cover:self.playCoverUrl PlayItems:self.playlistItems Result:^(NSError * err) {
+    self.model.items = self.playlistItems;
+    
+    [DNEHUD showLoading:@""];
+    void(^finishBlock)(NSError*) = ^(NSError* err){
         [DNEHUD hideHUD];
-        
         if(err == nil){
             [DNEHUD showMessage:@"Save Success"];
-            
             [self.navigationController popViewControllerAnimated:YES];
-            
-            
         }else{
             [DNEHUD showMessage:@"Save fail"];
         }
-        
-    }];
+    };
+    
+    if(self.isAvatarUpdate){
+            NSData *imageData = UIImageJPEGRepresentation(self.avatar.image, 0.7);
+            [DNEHUD showLoading:@"uploading"];
+            [[MPAliOSSManager sharedManager] uploadData:imageData withBlock:^(NSString * url, NSError * err) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [DNEHUD hideHUD];
+                    if(err){
+                        [DNEHUD showMessage:err.description];
+                    }else{
+                        [DNEHUD showMessage:@"Upload Success"];
+                        NSLog(@"url %@",url);
+                        self.model.coverUrl = url;
+                        if (self.isCreate) {
+                            [self.service createPlaylistWithModel:self.model
+                                                           Result:finishBlock];
+                        }else{
+                            [self.service updatePlaylistWithModel:self.model
+                                                           Result:finishBlock];
+                        }
+                    }
+                });
+            }];
+        }else{
+            if (self.isCreate) {
+                [self.service createPlaylistWithModel:self.model
+                                               Result:finishBlock];
+            }else{
+                [self.service updatePlaylistWithModel:self.model
+                                               Result:finishBlock];
+            }
+        }
+    
+    
+    
+    
+    
+    
+    
 }
 
 - (void)onCover{
@@ -268,7 +322,7 @@
 
 - (void)onTitle{
     [self showCreatePlaylistAlert:self isCreate:NO onCreate:^(NSString * newTitle){
-        self.playTitle = newTitle;
+        self.model.title = newTitle;
     }];
 }
 
@@ -285,8 +339,8 @@
     // 添加TextField到Alert
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"Playlist Name";
-        if(self.playTitle.length && !isCreate){
-            textField.text = self.playTitle;
+        if(self.model.title.length && !isCreate){
+            textField.text = self.model.title;
         }
         
     }];
@@ -342,12 +396,12 @@
 }
 
 
--(NSMutableArray *)playlistItems{
-    if(_playlistItems == nil){
-        _playlistItems = [NSMutableArray new];
-    }
-    return _playlistItems;
-}
+//-(NSMutableArray *)playlistItems{
+//    if(_playlistItems == nil){
+//        _playlistItems = [NSMutableArray new];
+//    }
+//    return _playlistItems;
+//}
 
 -(MPPlaylistService *)service{
     if(_service == nil){
@@ -374,6 +428,42 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return  80;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;  // 所有行都可以编辑
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // 在数据源中删除该项
+        [self.playlistItems removeObjectAtIndex:indexPath.row];
+        
+        // 在表视图中删除该行
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;  // 所有行都可以拖拽
+}
+
+// 更新数据源以反映新位置
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    // 更新数据源
+    id item = self.playlistItems[sourceIndexPath.row];
+    [self.playlistItems removeObjectAtIndex:sourceIndexPath.row];
+    [self.playlistItems insertObject:item atIndex:destinationIndexPath.row];
+}
+- (NSArray<UIDragItem *> *)tableView:(UITableView *)tableView itemsForBeginningDragSession:(id<UIDragSession>)session atIndexPath:(NSIndexPath *)indexPath {
+    // 创建一个 UIDragItem，并设置拖动时显示的内容
+    UIDragItem *dragItem = [[UIDragItem alloc] initWithItemProvider:[[NSItemProvider alloc] initWithObject:@"AAA"]];
+    return @[dragItem];
+}
+
+// 接收拖放的处理
+- (void)tableView:(UITableView *)tableView performDropWithCoordinator:(id<UITableViewDropCoordinator>)coordinator {
+    // 处理放下时的逻辑
 }
 @end
 

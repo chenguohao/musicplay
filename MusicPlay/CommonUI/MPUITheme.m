@@ -39,7 +39,7 @@
 }
 
 + (UIFont*)font_normal:(CGFloat)size{
-    return [UIFont fontWithName:@"AppleSDGothicNeo" size:size];
+    return [UIFont fontWithName:@"AppleSDGothicNeo-Regular" size:size];
 }
 
 + (UIFont*)font_bold:(CGFloat)size{

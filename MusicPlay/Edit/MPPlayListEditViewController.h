@@ -9,8 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MPPlaylistModel;
 @interface MPPlayListEditViewController : UIViewController
-- (void)setupInfo:(NSDictionary*)info;
+@property (nonatomic,assign)BOOL isCreate;
+- (instancetype)initWithModel:(MPPlaylistModel*)model;
 - (void)showCreatePlaylistAlert:(UIViewController*)viewController
                        isCreate:(BOOL)isCreate
                        onCreate:(void(^)(NSString*))block;

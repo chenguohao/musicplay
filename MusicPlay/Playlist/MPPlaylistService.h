@@ -8,22 +8,21 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class  MPPlaylistModel;
 @interface MPPlaylistService : NSObject
-- (void)createPlaylistWithTitle:(NSString*)title
-                          Cover:(NSString*)url
-                      PlayItems:(NSArray*)items
+- (void)createPlaylistWithModel:(MPPlaylistModel*)model
                          Result:(void(^)(NSError*))result;
 
-- (void)updatePlaylistWithPlayID:(NSInteger)playID
-                           Title:(NSString*)title
-                          Cover:(NSString*)url
-                      PlayItems:(NSArray*)items
+- (void)updatePlaylistWithModel:(MPPlaylistModel*)model
                          Result:(void(^)(NSError*))result;
 
 - (void)getPlaylistWithPage:(int)index
                        Size:(int)size
                      Result:(void(^)(NSArray*))result;
+
+- (void)likePlayList:(BOOL)islike
+          PlaylistID:(int)playlistID
+              Result:(void(^)(NSError*))result;
 
 @end
 

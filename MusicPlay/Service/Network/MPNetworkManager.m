@@ -9,7 +9,7 @@
 #import "AFNetworking/AFNetworking.h"
 
 
-const NSString* HOST = @"http://192.168.1.221:8011";
+const NSString* HOST = @"http://127.0.0.1:8011";//@"http://192.168.1.221:8011";
 
 @implementation MPNetworkManager
 
@@ -75,12 +75,13 @@ const NSString* HOST = @"http://192.168.1.221:8011";
                 block(nil,error);
             }
     };
+    int uid = MPProfileManager.sharedManager.curUser.uid;
+    NSDictionary* header = @{@"X-User-ID":@(uid).stringValue};
     
-    
-    if(isPost){
-        [manager POST:url parameters:params headers:nil progress:nil success:resultBlock failure:failBlock];
+     if(isPost){
+        [manager POST:url parameters:params headers:header progress:nil success:resultBlock failure:failBlock];
     }else{
-        [manager GET:url parameters:params headers:nil progress:nil success:resultBlock failure:failBlock];
+        [manager GET:url parameters:params headers:header progress:nil success:resultBlock failure:failBlock];
     }
     
     

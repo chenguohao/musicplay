@@ -12,6 +12,7 @@
 		462574AA2C9314AC00C91CE1 /* ReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 462574A92C9314AC00C91CE1 /* ReportManager.m */; };
 		463180552C7C5925004D47DE /* MPAuthService.m in Sources */ = {isa = PBXBuildFile; fileRef = 463180542C7C5925004D47DE /* MPAuthService.m */; };
 		463180572C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 in Resources */ = {isa = PBXBuildFile; fileRef = 463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */; };
+		4631F4762C96F7A600600A28 /* MPPlaylistModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4631F4752C96F7A600600A28 /* MPPlaylistModel.m */; };
 		463CC1542C6DEF2000993ABB /* MPPlayListEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC1532C6DEF2000993ABB /* MPPlayListEditViewController.m */; };
 		463CC1582C6E06CC00993ABB /* DNEHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC1572C6E06CC00993ABB /* DNEHUD.m */; };
 		463CC15F2C6E2CBF00993ABB /* MPAliOSSManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 463CC15E2C6E2CBF00993ABB /* MPAliOSSManager.m */; };
@@ -69,6 +70,8 @@
 		463180532C7C5925004D47DE /* MPAuthService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPAuthService.h; sourceTree = "<group>"; };
 		463180542C7C5925004D47DE /* MPAuthService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPAuthService.m; sourceTree = "<group>"; };
 		463180562C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AuthKey_9TA7FWK494.p8; sourceTree = "<group>"; };
+		4631F4742C96F7A600600A28 /* MPPlaylistModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlaylistModel.h; sourceTree = "<group>"; };
+		4631F4752C96F7A600600A28 /* MPPlaylistModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlaylistModel.m; sourceTree = "<group>"; };
 		463CC1522C6DEF2000993ABB /* MPPlayListEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlayListEditViewController.h; sourceTree = "<group>"; };
 		463CC1532C6DEF2000993ABB /* MPPlayListEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPlayListEditViewController.m; sourceTree = "<group>"; };
 		463CC1562C6E06CC00993ABB /* DNEHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DNEHUD.h; sourceTree = "<group>"; };
@@ -216,6 +219,8 @@
 			children = (
 				463CC1522C6DEF2000993ABB /* MPPlayListEditViewController.h */,
 				463CC1532C6DEF2000993ABB /* MPPlayListEditViewController.m */,
+				4631F4742C96F7A600600A28 /* MPPlaylistModel.h */,
+				4631F4752C96F7A600600A28 /* MPPlaylistModel.m */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -588,6 +593,7 @@
 				469812AC2C7DC4B2003C0821 /* MPUserProfile.m in Sources */,
 				4647F1862C64FE56002CCBE3 /* MPPlayDetailHeaderView.m in Sources */,
 				466F1AEA2C802BF100986AA6 /* MPNetworkManager.m in Sources */,
+				4631F4762C96F7A600600A28 /* MPPlaylistModel.m in Sources */,
 				46F909C52C8ED30A00A04F62 /* D9EULAViewController.m in Sources */,
 				46A689DD2C671182000A7033 /* MPMusicSearchWrapper.m in Sources */,
 				46F909CC2C8EDFC700A04F62 /* UIButton+BgImg.m in Sources */,
@@ -676,7 +682,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -731,7 +737,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -762,6 +768,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -804,6 +811,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -14,10 +14,12 @@
 #import "MJRefresh/MJRefresh.h"
 #import "D9ReportAlert.h"
 #import "ReportManager.h"
+#import "MPPlaylistModel.h"
+#import <Mantle/Mantle.h>
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray<NSDictionary *> *models;
+@property (nonatomic, strong) NSArray<MPPlaylistModel *> *models;
 @property (nonatomic, strong) NSIndexPath *expandedIndexPath;
 @property (nonatomic) NSInteger curSection;
 @property (nonatomic,strong) MPPlaylistService* service;
@@ -100,7 +102,11 @@
         int userID = [info[@"owner_id"] intValue];
         int contentID = [info[@"playlist_id"] intValue];
         if([[ReportManager sharedManager] isOKWithUser:userID ContentID:contentID]){
-            [marray addObject:info];
+            MPPlaylistModel* model = [MTLJSONAdapter modelOfClass:[MPPlaylistModel class]
+                                               fromJSONDictionary:info
+                                                            error:nil];
+
+            [marray addObject:model];
         }
     }
     
@@ -129,11 +135,13 @@
 //    //
 //    }
     
-    
-    MPPlayListEditViewController * editVC = [MPPlayListEditViewController new];
     NSString* t = @"111";
-    NSMutableDictionary* info = @{@"title":t};
-    [editVC setupInfo:info];
+    
+    MPPlaylistModel* model = [MPPlaylistModel new];
+    model.ownerID  = MPProfileManager.sharedManager.curUser.uid;
+    model.title = t;
+    MPPlayListEditViewController * editVC = [[MPPlayListEditViewController alloc] initWithModel:model];
+    editVC.isCreate = YES;
     [self.navigationController pushViewController:editVC animated:YES];
     return;;
 //    
@@ -215,7 +223,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if(self.curSection == section){
-        NSArray* playlist = self.models[section][@"list_item"];
+        MPPlaylistModel* model = self.models[section];
+        NSArray* playlist = model.items;
         return playlist.count;
     }
     
@@ -228,7 +237,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MPPlayDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CardCell" forIndexPath:indexPath];
-    NSArray* playlist = self.models[indexPath.section][@"list_item"];
+    NSArray* playlist = self.models[indexPath.section].items;
     NSDictionary* info = playlist[indexPath.row];
     [cell configureWithInfo:info];
     [cell setBgColor2: indexPath.section % 2 == 0?MPUITheme.contentBg:MPUITheme.contentBg_semi];
@@ -256,51 +265,104 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     MPPlaylistSectionHeader* view = [MPPlaylistSectionHeader new];
     view.tag = section;
-    [view configureWithDictionary:self.models[section] index:section];
-    int contentID = [self.models[section][@"playlist_id"] intValue] ;
-    int userID = [self.models[section][@"owner_id"] intValue];
+    MPPlaylistModel* model = self.models[section];
+    [view configureWithModel:model index:section];
+    int contentID = self.models[section].playlistID  ;
+    int userID = self.models[section].ownerID;
     UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onHeader:)];
     [view addGestureRecognizer:tap];
-    D9ReportAlert* report = [[D9ReportAlert alloc] init];
-    [view setMoreAction:^{
-       
-        [report showReportWithContentID:contentID
-                                 UserID:userID
-                            FinishBlock:^(NSString * reason) {
-            if([reason containsString:@"Hide"]){
-                
-                
-                [self.tableView beginUpdates];
-                if ([reason  isEqualToString:@"Hide this content"]) {
-                  
-                    NSMutableIndexSet* sections = [NSMutableIndexSet new];
-                    for (int i = 0; i < self.models.count; i++) {
-                        if (contentID == [self.models[i][@"playlist_id"] intValue]) {
-                            [sections addIndex:i];
-                        }
-                    }
-                    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-                    
+    
+    
+    [view setLikeAvtion:^(BOOL isLike) {
+        [self.service likePlayList:isLike PlaylistID:contentID Result:^(NSError * err) {
+            if (err) {
+                [DNEHUD showMessage:err.description];
+            }else{
+                view.model.isLiked = isLike;
+                if(isLike){
+                    view.model.likeCount += 1;
                 }else{
-                    NSMutableIndexSet* sections = [NSMutableIndexSet new];
-                    for (int i = 0; i < self.models.count; i++) {
-                        if (userID == [self.models[i][@"owner_id"] intValue]) {
-                            [sections addIndex:i];
-                        }
-                    }
-                    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+                    view.model.likeCount -= 1;
                 }
-              
-                [self wrapReportWithList:self.models];
-                [self.tableView endUpdates];
-                
-               
-//                [self.tableView reloadData];
             }
         }];
     }];
+    
+    [view setMoreAction:^{
+        
+        if(userID == MPProfileManager.sharedManager.curUser.uid){
+            MPPlaylistModel* model = [MTLJSONAdapter modelOfClass:[MPPlaylistModel class] fromJSONDictionary:self.models[section] error:nil];
+            [self showEditMenuWihModel:model];
+        }else{
+            [self reportWithContentID:contentID 
+                               UserID:userID];
+        }
+        
+        
+    }];
 //    view.backgroundColor = UIColor.redColor;
     return view;
+}
+
+- (void)showEditMenuWihModel:(MPPlaylistModel*)model{
+    UIAlertController *sheets = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CustomLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    
+    [sheets addAction:cancelAction];
+    @weakify(self)
+    
+    UIAlertAction *hideContentAction = [UIAlertAction actionWithTitle:@"Edit" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [sheets addAction:hideContentAction];
+    
+    UIAlertAction *hideUserAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self)
+    }];
+    [sheets addAction:hideUserAction];
+    [[MPUIManager.sharedManager getCurrentViewController] presentViewController:sheets animated:YES completion:nil];
+}
+
+- (void)reportWithContentID:(int)contentID
+                     UserID:(int)userID{
+    D9ReportAlert* report = [[D9ReportAlert alloc] init];
+    [report showReportWithContentID:contentID
+                             UserID:userID
+                        FinishBlock:^(NSString * reason) {
+        if([reason containsString:@"Hide"]){
+            
+            
+            [self.tableView beginUpdates];
+            if ([reason  isEqualToString:@"Hide this content"]) {
+              
+                NSMutableIndexSet* sections = [NSMutableIndexSet new];
+                for (int i = 0; i < self.models.count; i++) {
+                    if (contentID == self.models[i].playlistID) {
+                        [sections addIndex:i];
+                    }
+                }
+                [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+                
+            }else{
+                NSMutableIndexSet* sections = [NSMutableIndexSet new];
+                for (int i = 0; i < self.models.count; i++) {
+                    if (userID == self.models[i].ownerID) {
+                        [sections addIndex:i];
+                    }
+                }
+                [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+            }
+          
+            [self wrapReportWithList:self.models];
+            [self.tableView endUpdates];
+            
+           
+//                [self.tableView reloadData];
+        }
+    }];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -327,7 +389,7 @@
 
 - (void)removeRowInCurSection:(int)section{
     NSMutableArray* sourceArr = [NSMutableArray new];
-    NSArray* playList = self.models[section][@"list_item"];
+    NSArray* playList = self.models[section].items;
     for (int i = 0; i < [playList count]; i++)
     {
         // 取得当前分区行indexPath
@@ -344,7 +406,7 @@
 
 - (void)addRowInCurSection{
     NSMutableArray* sourceArr = [NSMutableArray new];
-    NSArray* playList = self.models[self.curSection][@"list_item"];
+    NSArray* playList = self.models[self.curSection].items;
     for (int i = 0; i < [playList count]; i++)
     {
         // 取得当前分区行indexPath
@@ -360,7 +422,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSArray* playlist = self.models[indexPath.section][@"list_item"];
+    NSArray* playlist = self.models[indexPath.section].items;
     
     
     

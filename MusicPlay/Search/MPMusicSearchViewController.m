@@ -89,13 +89,51 @@
     // 在这里进行搜索逻辑
     // 假设我们有一个方法来获取搜索结果
     [self.searchWrapper searchForSongsWithQuery:searchText completion:^(NSArray * _Nonnull results, NSError * _Nonnull error) {
-        self.searchResults = results;
+        NSMutableArray* marray = [NSMutableArray new];
+        for (id info in results) {
+            NSDictionary *dictionary = [self recursiveCopy:info];
+         
+            [marray addObject:dictionary];
+        }
+        
+        self.searchResults = marray;
         [self.tableView reloadData];
     }];
     
     // 重新加载表格视图以显示新结果
     [self.tableView reloadData];
 }
+
+- (id)recursiveCopy:(id)object {
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        // 如果是NSDictionary，创建一个NSMutableDictionary
+        NSMutableDictionary *newDictionary = [NSMutableDictionary dictionary];
+        
+        NSDictionary *dictionary = (NSDictionary *)object;
+        for (id key in dictionary) {
+            id value = dictionary[key];
+            // 对值递归调用
+            newDictionary[key] = [self recursiveCopy:value];
+        }
+        
+        return newDictionary;
+    } else if ([object isKindOfClass:[NSArray class]]) {
+        // 如果是NSArray，创建一个NSMutableArray
+        NSMutableArray *newArray = [NSMutableArray array];
+        
+        NSArray *array = (NSArray *)object;
+        for (id element in array) {
+            // 对数组中的每个元素递归调用
+            [newArray addObject:[self recursiveCopy:element]];
+        }
+        
+        return newArray;
+    } else {
+        // 如果是基础类型，直接返回
+        return object;
+    }
+}
+
 
 - (void)fetchSearchResultsForQuery:(NSString *)query completion: (void(^)(NSArray * _Nonnull results, NSError * _Nonnull error))block{
     // 这里假设你有一个方法来获取搜索结果

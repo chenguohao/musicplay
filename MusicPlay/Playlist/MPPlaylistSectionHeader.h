@@ -10,12 +10,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
  
-
+@class MPPlaylistModel;
 @interface MPPlaylistSectionHeader : UIView
+
+@property (nonatomic, strong) MPPlaylistModel* model;
 @property (nonatomic, assign) BOOL isExpanded;
-- (void)configureWithDictionary:(NSDictionary *)dict
+- (void)configureWithModel:(MPPlaylistModel *)model
                           index:(NSInteger)index;
 - (void)setMoreAction:(void(^)(void))block;
+- (void)setLikeAvtion:(void(^)(BOOL))block;
 @end
 
 

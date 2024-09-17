@@ -9,23 +9,13 @@
 #import "MPNetworkManager.h"
 #import "MPProfileManager.h"
 #import "MPUserProfile.h"
+#import "MPPlaylistModel.h"
 @implementation MPPlaylistService
-- (void)createPlaylistWithTitle:(NSString*)title
-                          Cover:(NSString*)coverUrl
-                      PlayItems:(NSArray*)items
+- (void)createPlaylistWithModel:(MPPlaylistModel*)model
                          Result:(void(^)(NSError*))result{
-    NSMutableDictionary* mdic = [NSMutableDictionary new];
-    [mdic setObject:title forKey:@"title"];
-    if(coverUrl.length < 1){
-        coverUrl = @"";
-    }
-    [mdic setObject:coverUrl forKey:@"cover" ];
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:items options:0 error:nil];
-    [mdic setObject:items forKey:@"playlist" ];
     
-    int UID = [MPProfileManager sharedManager].curUser.uid;
-    UID = 110;
-    [mdic setObject:@(UID) forKey:@"ownerID" ];
+    
+    NSMutableDictionary* mdic = [[MTLJSONAdapter JSONDictionaryFromModel:model error:nil] mutableCopy];
     [[MPNetworkManager sharedManager] postRequestPath:@"/v1/createPlaylist"
                                                Params:mdic
                                            Completion:^(NSDictionary * dict, NSError * err) {
@@ -72,5 +62,21 @@
         }
     }];
 
+}
+
+- (void)likePlayList:(BOOL)islike
+          PlaylistID:(int)playlistID
+              Result:(void(^)(NSError*))result{
+    NSMutableDictionary* mdic = [NSMutableDictionary new];
+    [mdic setObject:@(islike) forKey:@"islike"];
+    [mdic setObject:@(playlistID) forKey:@"target_id"];
+    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/like"
+                                               Params:mdic
+                                           Completion:^(id nul, NSError * err) {
+      
+        if(result){
+            result(err);
+        }
+    }];
 }
 @end
