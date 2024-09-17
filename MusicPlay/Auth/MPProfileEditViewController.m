@@ -113,7 +113,7 @@
 
 - (void)setupProfile{
     MPUserProfile*profile = MPProfileManager.sharedManager.curUser;
-    [self.avatar sd_setImageWithURL:[NSURL URLWithString:profile.avatar]];
+    [self.avatar sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     self.nameInput.text = profile.name;
     self.originProfile = [profile copy];
 }

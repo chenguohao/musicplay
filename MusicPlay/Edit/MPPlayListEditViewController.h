@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showCreatePlaylistAlert:(UIViewController*)viewController
                        isCreate:(BOOL)isCreate
                        onCreate:(void(^)(NSString*))block;
+- (void)setRefreshBlock:(void(^)(void))block;
 @end
 
 NS_ASSUME_NONNULL_END

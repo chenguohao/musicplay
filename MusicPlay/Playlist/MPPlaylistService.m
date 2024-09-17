@@ -25,18 +25,10 @@
     }];
 }
 
-- (void)updatePlaylistWithPlayID:(NSInteger)playID
-                           Title:(NSString*)title
-                          Cover:(NSString*)coverUrl
-                      PlayItems:(NSArray*)items
-                          Result:(void(^)(NSError*))result{
-    NSMutableDictionary* mdic = [NSMutableDictionary new];
-    [mdic setObject:@(playID) forKey:@"playID"];
-    [mdic setObject:title forKey:@"title"];
-    [mdic setObject:coverUrl forKey:@"cover" ];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:items options:0 error:nil];
-    [mdic setObject:jsonData forKey:@"playlist" ];
-    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/updatePlayList"
+- (void)updatePlaylistWithModel:(MPPlaylistModel*)model
+                         Result:(void(^)(NSError*))result{
+    NSMutableDictionary* mdic = [[MTLJSONAdapter JSONDictionaryFromModel:model error:nil] mutableCopy];
+    [[MPNetworkManager sharedManager] postRequestPath:@"/v1/updatePlaylist"
                                                Params:mdic
                                            Completion:^(NSDictionary * dict, NSError * err) {
         if(result){

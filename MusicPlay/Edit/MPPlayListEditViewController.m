@@ -30,6 +30,7 @@
 @property (nonatomic,assign) BOOL isAvatarUpdate;
 @property (nonatomic,strong) UIImageView* titleEdit;
 @property (nonatomic,strong) MPPlaylistModel* model;
+@property (nonatomic,strong) void(^onRefresh)(void);
 @end
 
 @implementation MPPlayListEditViewController
@@ -128,9 +129,17 @@
     
     NSDateFormatter* formatter = [NSDateFormatter new];
     formatter.dateFormat = @"yyyy-MM-dd";
-    NSDate* now = [NSDate date];
-    NSString* nowStr = [formatter stringFromDate:now];
-    self.createdAtLabel.text = [NSString stringWithFormat:@"Created at %@",nowStr];
+    if (self.model.createAt) {
+        
+        NSDate* time = [NSDate dateWithTimeIntervalSince1970:self.model.createAt];
+        NSString* timeStr = [formatter stringFromDate:time];
+        self.createdAtLabel.text = [NSString stringWithFormat:@"Created at %@",timeStr];
+    }else{
+        NSDate* now = [NSDate date];
+        NSString* nowStr = [formatter stringFromDate:now];
+        self.createdAtLabel.text = [NSString stringWithFormat:@"Created at %@",nowStr];
+    }
+    
     self.createdAtLabel.font = [UIFont systemFontOfSize:12];
     self.createdAtLabel.textColor = UIColor.grayColor;
     [self.headerView addSubview:self.createdAtLabel];
@@ -247,6 +256,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)setRefreshBlock:(void(^)(void))block{
+    self.onRefresh = block;
+}
+
 - (void)onSave{
     self.model.items = self.playlistItems;
     
@@ -255,14 +268,17 @@
         [DNEHUD hideHUD];
         if(err == nil){
             [DNEHUD showMessage:@"Save Success"];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES] ;
+            if(self.onRefresh){
+                self.onRefresh();
+            }
         }else{
             [DNEHUD showMessage:@"Save fail"];
         }
     };
     
     if(self.isAvatarUpdate){
-            NSData *imageData = UIImageJPEGRepresentation(self.avatar.image, 0.7);
+            NSData *imageData = UIImageJPEGRepresentation(self.playlistCover.image, 0.7);
             [DNEHUD showLoading:@"uploading"];
             [[MPAliOSSManager sharedManager] uploadData:imageData withBlock:^(NSString * url, NSError * err) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -288,6 +304,9 @@
                 [self.service createPlaylistWithModel:self.model
                                                Result:finishBlock];
             }else{
+                
+               
+                
                 [self.service updatePlaylistWithModel:self.model
                                                Result:finishBlock];
             }

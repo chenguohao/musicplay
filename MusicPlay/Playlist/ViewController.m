@@ -291,8 +291,7 @@
     [view setMoreAction:^{
         
         if(userID == MPProfileManager.sharedManager.curUser.uid){
-            MPPlaylistModel* model = [MTLJSONAdapter modelOfClass:[MPPlaylistModel class] fromJSONDictionary:self.models[section] error:nil];
-            [self showEditMenuWihModel:model];
+            [self showEditMenuWihModel:self.models[section]];
         }else{
             [self reportWithContentID:contentID 
                                UserID:userID];
@@ -315,15 +314,30 @@
     @weakify(self)
     
     UIAlertAction *hideContentAction = [UIAlertAction actionWithTitle:@"Edit" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
+        [self onEdit:model];
     }];
     [sheets addAction:hideContentAction];
     
     UIAlertAction *hideUserAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        @strongify(self)
+         
+        [self onDelete];
     }];
     [sheets addAction:hideUserAction];
     [[MPUIManager.sharedManager getCurrentViewController] presentViewController:sheets animated:YES completion:nil];
+}
+
+- (void)onEdit:(MPPlaylistModel*)model{
+    MPPlayListEditViewController * editVC = [[MPPlayListEditViewController alloc] initWithModel:model];
+    editVC.isCreate = NO;
+    [self.navigationController pushViewController:editVC animated:YES];
+    [editVC setRefreshBlock:^{
+        [self refreshList];
+    }];
+    return;;
+}
+
+- (void)onDelete{
+    
 }
 
 - (void)reportWithContentID:(int)contentID
