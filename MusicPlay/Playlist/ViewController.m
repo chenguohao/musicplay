@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSIndexPath *expandedIndexPath;
 @property (nonatomic) NSInteger curSection;
 @property (nonatomic,strong) MPPlaylistService* service;
+@property (nonatomic,strong) D9ReportAlert* report;
 @end
 
 @implementation ViewController
@@ -98,16 +99,30 @@
 
 - (void)wrapReportWithList:(NSArray*)list{
     NSMutableArray* marray = [NSMutableArray new];
-    for (NSDictionary* info in list) {
-        int userID = [info[@"owner_id"] intValue];
-        int contentID = [info[@"playlist_id"] intValue];
-        if([[ReportManager sharedManager] isOKWithUser:userID ContentID:contentID]){
-            MPPlaylistModel* model = [MTLJSONAdapter modelOfClass:[MPPlaylistModel class]
-                                               fromJSONDictionary:info
-                                                            error:nil];
+    for (id info in list) {
+        int userID ;
+        int contentID ;
+        if([info isKindOfClass:[NSDictionary class]]){
+            NSDictionary* dictInfo = (NSDictionary*)info;
+            userID = [info[@"owner_id"] intValue];
+            contentID  = [info[@"playlist_id"] intValue];
+            if([[ReportManager sharedManager] isOKWithUser:userID ContentID:contentID]){
+                MPPlaylistModel* model = [MTLJSONAdapter modelOfClass:[MPPlaylistModel class]
+                                                   fromJSONDictionary:info
+                                                                error:nil];
 
-            [marray addObject:model];
+                [marray addObject:model];
+            }
+        }else if([info isKindOfClass:[MPPlaylistModel class]]){
+            MPPlaylistModel* model = (MPPlaylistModel*)info;
+            userID = model.ownerID;
+            contentID = model.playlistID;
+            if([[ReportManager sharedManager] isOKWithUser:userID ContentID:contentID]){
+                [marray addObject:model];
+            }
         }
+      
+        
     }
     
     self.models = marray;
@@ -308,7 +323,7 @@
 }
 
 - (void)showEditMenuWihModel:(MPPlaylistModel*)model{
-    UIAlertController *sheets = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *sheets = [UIAlertController alertControllerWithTitle:@"More" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CustomLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
@@ -368,8 +383,8 @@
 
 - (void)reportWithContentID:(int)contentID
                      UserID:(int)userID{
-    D9ReportAlert* report = [[D9ReportAlert alloc] init];
-    [report showReportWithContentID:contentID
+    self.report = [[D9ReportAlert alloc] init];
+    [self.report showReportWithContentID:contentID
                              UserID:userID
                         FinishBlock:^(NSString * reason) {
         if([reason containsString:@"Hide"]){
