@@ -122,28 +122,32 @@
 
 - (void)onAdd{
     
-//    if(!IsUserLogin){
-//        [[MPUIManager sharedManager] showLogin];
-//    }else{
-//        MPPlayListEditViewController * editVC = [MPPlayListEditViewController new];
-//        [editVC showCreatePlaylistAlert:self
-//                               onCreate:^(NSString * title) {
-//            NSDictionary* info = @{@"title":title};
-//            [editVC setupInfo:info];
-//            [self.navigationController pushViewController:editVC animated:YES];
-//        }];
-//    //
-//    }
+    if(!IsUserLogin){
+        [[MPUIManager sharedManager] showLogin];
+    }else{
+        MPPlaylistModel* model = [MPPlaylistModel new];
+        MPPlayListEditViewController * editVC = [[MPPlayListEditViewController alloc] initWithModel:model];
+        editVC.isCreate = YES;
+        
+        [editVC showCreatePlaylistAlert:self
+                               isCreate:YES
+                               onCreate:^(NSString * title) {
+           
+            model.ownerID  = MPProfileManager.sharedManager.curUser.uid;
+            model.title = title;
+            [self.navigationController pushViewController:editVC animated:YES];
+            [editVC setRefreshBlock:^{
+                [self refreshList];
+            }];
+        }];
+    //
+    }
     
-    NSString* t = @"111";
+//    NSString* t = @"111";
+//
     
-    MPPlaylistModel* model = [MPPlaylistModel new];
-    model.ownerID  = MPProfileManager.sharedManager.curUser.uid;
-    model.title = t;
-    MPPlayListEditViewController * editVC = [[MPPlayListEditViewController alloc] initWithModel:model];
-    editVC.isCreate = YES;
-    [self.navigationController pushViewController:editVC animated:YES];
-    return;;
+    
+//    return;;
 //    
 //    
 //    
@@ -337,17 +341,12 @@
 }
 
 - (void)onDelete:(MPPlaylistModel*)model{
-    // 创建UIAlertController
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Delete Playlist"
                                                                              message:@"Are you sure you want to delete this playlist? This action cannot be undone."
                                                                       preferredStyle:UIAlertControllerStyleAlert];
-
-    // 创建"OK"按钮
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Delete"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
-        // 点击"OK"按钮后的操作
-        NSLog(@"OK Button Pressed");
         [self.service deletePlaylistWithPlaylistID:model.playlistID 
                                             Result:^(NSError * err) {
             if(err){
@@ -358,20 +357,11 @@
             }
         }];
     }];
-
-    // 创建"Cancel"按钮
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
                                                            style:UIAlertActionStyleCancel
-                                                         handler:^(UIAlertAction * _Nonnull action) {
-        // 点击"Cancel"按钮后的操作
-        NSLog(@"Cancel Button Pressed");
-    }];
-
-    // 将按钮添加到UIAlertController
+                                                         handler:^(UIAlertAction * _Nonnull action) {}];
     [alertController addAction:okAction];
     [alertController addAction:cancelAction];
-
-    // 显示UIAlertController
     [self presentViewController:alertController animated:YES completion:nil];
 }
 

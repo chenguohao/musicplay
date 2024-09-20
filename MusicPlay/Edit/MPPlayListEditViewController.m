@@ -27,9 +27,11 @@
 @property (nonatomic,strong) UIImageView* avatarEdit;
 @property (nonatomic,strong) MPPlaylistService* service;
 @property (nonatomic,strong) UILabel* createAt;
-@property (nonatomic,assign) BOOL isAvatarUpdate;
+@property (nonatomic,assign) BOOL isCoverUpdated;
 @property (nonatomic,strong) UIImageView* titleEdit;
 @property (nonatomic,strong) MPPlaylistModel* model;
+@property (nonatomic,strong) MPPlaylistModel* modelSnapshot;
+@property (nonatomic,strong) UIButton *saveBtn;
 @property (nonatomic,strong) void(^onRefresh)(void);
 @end
 
@@ -38,12 +40,14 @@
 -(instancetype)init{
     self = [super init];
     self.model = [MPPlaylistModel init];
+self.modelSnapshot = self.model.copy;
     return self;
 }
 
 - (instancetype)initWithModel:(MPPlaylistModel*)model{
     self = [super init];
     self.model = model;
+    self.modelSnapshot = self.model.copy;
     if(self.model.items.count){
         self.playlistItems = [NSMutableArray arrayWithArray:self.model.items];
     }else{
@@ -58,6 +62,9 @@
     [super viewDidLoad];
     [self setupUI];
     [self setupConstraints];
+    
+    
+    [self updateSaveButtonState];
 }
 
 - (void)setupUI {
@@ -70,12 +77,13 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 
     
-    UIButton *btn_save = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn_save.frame = CGRectMake(4, 0, 40, 40);
-    [btn_save setTitle:@"Save" forState:UIControlStateNormal];
-    [btn_save setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-    [btn_save addTarget:self action:@selector(onSave) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn_save];
+    self.saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.saveBtn.frame = CGRectMake(4, 0, 40, 40);
+    [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    [self.saveBtn setTitleColor:MPUITheme.mainDark forState:UIControlStateNormal];
+    [self.saveBtn setTitleColor:UIColor.lightGrayColor forState:UIControlStateDisabled];
+    [self.saveBtn addTarget:self action:@selector(onSave) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.saveBtn];
 
     
     // Header View
@@ -101,6 +109,7 @@
     [RACObserve(self.model, title) subscribeNext:^(NSString *newTitle) {
         @strongify(self);
         self.playlistNameLabel.text = newTitle;
+        [self updateSaveButtonState];
     }];
     self.playlistNameLabel.userInteractionEnabled = YES;
     [self.playlistNameLabel addTapGestureWithBlock:^{
@@ -157,9 +166,12 @@
     // Add Song Button
     self.addSongButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.addSongButton setTitle:@"Add Song" forState:UIControlStateNormal];
-    self.addSongButton.backgroundColor = MPUITheme.contentBg;
+//    self.addSongButton.backgroundColor = MPUITheme.contentBg;
+    [self.addSongButton setBackgroundColorImage:MPUITheme.contentBg forState:UIControlStateNormal];
+    [self.addSongButton setBackgroundColorImage:UIColor.lightGrayColor forState:UIControlStateDisabled];
     [self.addSongButton setTitleColor:MPUITheme.contentText forState:UIControlStateNormal];
     self.addSongButton.layer.cornerRadius = 25;
+    self.addSongButton.clipsToBounds = YES;
     [self.addSongButton addTarget:self  action:@selector(onAdd) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.addSongButton];
     
@@ -242,18 +254,91 @@
     }];
 }
 
+- (void)checkAddButton{
+    self.addSongButton.enabled = self.playlistItems.count < 10;
+}
+
+- (void)updateSaveButtonState {
+    
+    if(self.playlistItems.count == 0){
+        self.saveBtn.enabled = NO;
+        return ;
+    }
+    
+    BOOL titleChanged = ![self.playlistNameLabel.text isEqualToString:self.modelSnapshot.title];
+    
+    if(titleChanged||self.isCoverUpdated||[self isItemsChanged]){
+        self.saveBtn.enabled = YES;
+    }else{
+        self.saveBtn.enabled = NO;
+    }
+}
+
+- (BOOL)isItemsChanged{
+    if(self.playlistItems.count != self.modelSnapshot.items.count){
+        return YES;
+    }
+    
+    if(self.playlistItems.count == 0){
+        return NO;
+    }
+    
+    for(int i =0;i< self.playlistItems.count;i++){
+        NSDictionary* info = self.playlistItems[i];
+        NSDictionary* oriInfo = self.modelSnapshot.items[i];
+        if(![info[@"id"] isEqualToString:oriInfo[@"id"]]){
+            return YES;
+        }
+        
+    }
+    return NO;
+}
+
 
 - (void)onAdd{
     MPMusicSearchViewController* searchVc = [MPMusicSearchViewController new];
     [searchVc setSelect:^(NSDictionary * selectInfo) {
         [self.playlistItems addObject:selectInfo];
+        [self checkAddButton];
+        //增加时检测
+        [self updateSaveButtonState];
         [self.tableView reloadData];
+        NSInteger lastSection = [self.tableView numberOfSections] - 1;
+        NSInteger lastRow = [self.tableView numberOfRowsInSection:lastSection] - 1;
+
+        if (lastRow >= 0) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastRow inSection:lastSection];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
     }];
     [self presentViewController:searchVc animated:YES completion:nil];
 }
 
 - (void)onBack{
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    BOOL titleChanged = ![self.playlistNameLabel.text isEqualToString:self.modelSnapshot.title];
+    
+    BOOL isUpdate = titleChanged||self.isCoverUpdated||[self isItemsChanged];
+    if(isUpdate){
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Unsaved Changes"
+                                                                                 message:@"Are you sure you want to exit without saving?"
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Confirm"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction * _Nonnull action) {}];
+        [alertController addAction:okAction];
+        [alertController addAction:cancelAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+    
 }
 
 - (void)setRefreshBlock:(void(^)(void))block{
@@ -277,7 +362,7 @@
         }
     };
     
-    if(self.isAvatarUpdate){
+    if(self.isCoverUpdated){
             NSData *imageData = UIImageJPEGRepresentation(self.playlistCover.image, 0.7);
             [DNEHUD showLoading:@"uploading"];
             [[MPAliOSSManager sharedManager] uploadData:imageData withBlock:^(NSString * url, NSError * err) {
@@ -326,7 +411,9 @@
         
         UIImage* image = photos[0];
         self.playlistCover.image = image;
-        self.isAvatarUpdate = YES;
+        self.isCoverUpdated = YES;
+        //更新头像检测
+        [self updateSaveButtonState];
       
     }];
     imagePickerVc.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -345,7 +432,7 @@
     }];
 }
 
-#pragma mark -
+#pragma mark - function
 - (void)showCreatePlaylistAlert:(UIViewController*)viewController
                        isCreate:(BOOL)isCreate
                        onCreate:(void(^)(NSString*))block{
@@ -429,7 +516,7 @@
     return _service;
 }
 
-#pragma mark -
+#pragma mark - tableview delegate
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MPPlayDetailListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MPPlayDetailListCell" forIndexPath:indexPath];
     NSArray* playlist = self.playlistItems;
@@ -457,9 +544,11 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // 在数据源中删除该项
         [self.playlistItems removeObjectAtIndex:indexPath.row];
-        
+        [self checkAddButton];
         // 在表视图中删除该行
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //删除cell时检测
+        [self updateSaveButtonState];
     }
 }
 
@@ -473,6 +562,8 @@
     id item = self.playlistItems[sourceIndexPath.row];
     [self.playlistItems removeObjectAtIndex:sourceIndexPath.row];
     [self.playlistItems insertObject:item atIndex:destinationIndexPath.row];
+    //更新顺序检测
+    [self updateSaveButtonState];
 }
 - (NSArray<UIDragItem *> *)tableView:(UITableView *)tableView itemsForBeginningDragSession:(id<UIDragSession>)session atIndexPath:(NSIndexPath *)indexPath {
     // 创建一个 UIDragItem，并设置拖动时显示的内容
