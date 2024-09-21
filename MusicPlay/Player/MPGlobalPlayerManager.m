@@ -93,6 +93,7 @@
         CGFloat bottomGap = 20;;
         CGFloat wW = [UIScreen mainScreen].bounds.size.width;
         _playerViewController.view.frame = CGRectMake(gap, wH - height - bottomGap, wW - 2*gap, height);
+        _playerViewController.view.backgroundColor = UIColor.clearColor;
 //        _playerViewController.view.backgroundColor = UIColor.redColor;
     }
     return _playerViewController;

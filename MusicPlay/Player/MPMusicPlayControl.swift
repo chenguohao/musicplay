@@ -98,7 +98,7 @@ struct MPFloatPlayerView: View {
     }
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(alignment: .center,spacing: 10) {
             Image(uiImage: localImage(url: albumCoverUrl)!)
                 .resizable()
                 .scaledToFit()
@@ -107,39 +107,42 @@ struct MPFloatPlayerView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 14, weight: .bold))
                 Text(artist)
                     .font(.system(size: 14))
                     .foregroundColor(.gray)
                 
                 Text(albumTitle)
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .foregroundColor(.gray)
-            }
+            }.padding(.vertical, 2).background(Color.white)
 
             Spacer()
             Button(action: {
                 // Play button action
                 isPlaying ? pausePlaying():beginPlaying()
             }) {
-                Image(systemName: isPlaying ?"pause.circle.fill":"play.circle.fill")
+                Image(isTrackAvilable ? (isPlaying ? "icon_play_playing" : "icon_play_pause") : "icon_play_disable")
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: 40, height: 40)
             }.disabled(!isTrackAvilable)
 
             Button(action: {
-                // Menu button action
                 showPlaylist.toggle()
             }) {
-                Image(systemName: "line.horizontal.3")
+                Image("common_playlist")
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .renderingMode(.template)
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                            .clipped()
+                    .foregroundColor(isTrackAvilable ? .black : Color.gray.opacity(0.5))
             }.sheet(isPresented: $showPlaylist) {
                 PlaylistView(showPlaylist: $showPlaylist).presentationDetents([.medium, .large]) // 设置为半屏(.medium)和全屏(.large)
                     .presentationDragIndicator(.visible)
-            }.disabled(!isPlayListAvilable)
+            }.disabled(!isTrackAvilable)
         }
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 10).background(Color.white)
     }
     
     private func beginPlaying() {
@@ -195,13 +198,13 @@ struct PlaylistView: View {
                         Text("\(entity.title) - \(entity.subtitle ?? "")")
                             .lineLimit(1) // 限定显示 1 行
                             .truncationMode(.middle)
-                            .foregroundColor(isCurrent(entity: entity) ? Color.red : Color.black) // 当前播放的条目使用红色字体
+                            .foregroundColor(isCurrent(entity: entity) ? Color(hex: "#74c69d") : Color.black) // 当前播放的条目使用红色字体
                         Spacer()
                         
                         if case let .song(song) = entity.item {
                             Text("\(formatDuration(song.duration))")
                                 .font(.system(size: 14))
-                                .foregroundColor(isCurrent(entity: entity)  ? Color.red : Color.gray) // 当前播放的条目用红色，其他条目用灰色
+                                .foregroundColor(isCurrent(entity: entity)  ? Color(hex: "#74c69d") : Color.gray) // 当前播放的条目用红色，其他条目用灰色
                         }
                     }}
                 
@@ -211,7 +214,7 @@ struct PlaylistView: View {
                 // 关闭视图的操作
                 showPlaylist = false
             }) {
-                Image(systemName: "chevron.down")
+                Image(systemName: "chevron.down").foregroundColor(Color(hex: "#2d6a4f"))
             })
         }
     }
@@ -241,50 +244,6 @@ struct PlaylistView: View {
     }
 }
 
-//
-//struct PlaylistView: View {
-//    @ObservedObject var musicPlayerQueue = ApplicationMusicPlayer.shared.queue
-//    @Binding var showPlaylist: Bool
-//     
-//    // 模拟的播放列表
-//    private var playlist :ApplicationMusicPlayer.Queue.Entries{
-//        print("cur \(String(describing: musicPlayerQueue.currentEntry?.title))")
-//        return  musicPlayerQueue.entries
-//    }
-//    var body: some View {
-//        NavigationView {
-//            List(playlist, id: \.self) { entity in
-//               
-//                HStack {
-//                    Text("\(entity.title) - \(entity.subtitle ?? "" )").lineLimit(1) // 限定显示 2 行
-//                        .truncationMode(.middle).foregroundColor( Color.black)
-//                    Spacer()
-//                    
-//                    if case let .song(song) = entity.item {
-//                        Text("\(formatDuration(song.duration))").font(.system(size: 14)).foregroundColor( musicPlayerQueue.currentEntry == entity ?Color.white: Color.gray)
-//                    }
-//                }.listRowBackground(
-//                    musicPlayerQueue.currentEntry == entity ? Color.gray:Color.white
-//                    ) // 设置背景色为蓝色
-//
-//            }
-//            .navigationTitle("Playlist")
-//            .navigationBarItems(trailing: Button(action: {
-//                // 关闭视图的操作
-//                showPlaylist = false
-//            }) {
-//                Image(systemName: "chevron.down")
-//            })
-//        }
-//    }
-//    
-//    func formatDuration(_ duration: TimeInterval?) -> String {
-//        guard let duration = duration else { return "00:00" }
-//        let minutes = Int(duration) / 60
-//        let seconds = Int(duration) % 60
-//        return String(format: "%02d:%02d", minutes, seconds)
-//    }
-//}
 
  
 
