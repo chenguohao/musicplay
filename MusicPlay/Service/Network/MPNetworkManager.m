@@ -9,7 +9,7 @@
 #import "AFNetworking/AFNetworking.h"
 
 
-const NSString* HOST = @"http://127.0.0.1:8011";//@"http://192.168.1.221:8011";
+const NSString* HOST = @"http://47.115.166.150:8011";//@"http://192.168.1.221:8011"; //
 
 @implementation MPNetworkManager
 

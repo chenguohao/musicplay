@@ -45,6 +45,8 @@
 		46A689DD2C671182000A7033 /* MPMusicSearchWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A689DC2C671182000A7033 /* MPMusicSearchWrapper.m */; };
 		46A689E12C6718F0000A7033 /* MPMusicCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A689E02C6718F0000A7033 /* MPMusicCacheManager.m */; };
 		46A689E32C6719B3000A7033 /* songsData_itunes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46A689E22C6719B3000A7033 /* songsData_itunes.plist */; };
+		46C2761C2C9E74BF005FF6AA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C2761B2C9E74BF005FF6AA /* ColorExtension.swift */; };
+		46C2761D2C9E83F7005FF6AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4647F1762C64EAFB002CCBE3 /* LaunchScreen.storyboard */; };
 		46DBEB0C2C6C6427001E5DB8 /* BDLeftMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB0A2C6C6427001E5DB8 /* BDLeftMenuView.m */; };
 		46DBEB0F2C6CE3E3001E5DB8 /* MPPlayerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB0E2C6CE3E3001E5DB8 /* MPPlayerListViewController.m */; };
 		46DBEB122C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DBEB112C6CE7EE001E5DB8 /* NSString+ItunesSongUrl.m */; };
@@ -134,6 +136,7 @@
 		46A689DF2C6718F0000A7033 /* MPMusicCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPMusicCacheManager.h; sourceTree = "<group>"; };
 		46A689E02C6718F0000A7033 /* MPMusicCacheManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPMusicCacheManager.m; sourceTree = "<group>"; };
 		46A689E22C6719B3000A7033 /* songsData_itunes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = songsData_itunes.plist; sourceTree = "<group>"; };
+		46C2761B2C9E74BF005FF6AA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		46DBEB092C6C6427001E5DB8 /* BDLeftMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDLeftMenuView.h; sourceTree = "<group>"; };
 		46DBEB0A2C6C6427001E5DB8 /* BDLeftMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDLeftMenuView.m; sourceTree = "<group>"; };
 		46DBEB0D2C6CE3E3001E5DB8 /* MPPlayerListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPlayerListViewController.h; sourceTree = "<group>"; };
@@ -342,6 +345,7 @@
 				46DBEB0D2C6CE3E3001E5DB8 /* MPPlayerListViewController.h */,
 				46DBEB0E2C6CE3E3001E5DB8 /* MPPlayerListViewController.m */,
 				46A4EE9A2C72F3AF0021A3B1 /* MPMusicPlayControl.swift */,
+				46C2761B2C9E74BF005FF6AA /* ColorExtension.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -511,6 +515,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46F909C82C8ED30A00A04F62 /* eula.txt in Resources */,
+				46C2761D2C9E83F7005FF6AA /* LaunchScreen.storyboard in Resources */,
 				46A689E32C6719B3000A7033 /* songsData_itunes.plist in Resources */,
 				463180572C7C6F25004D47DE /* AuthKey_9TA7FWK494.p8 in Resources */,
 				464E4B392C69F7440004AE4C /* songsData_musicapi.plist in Resources */,
@@ -608,6 +613,7 @@
 				46A689E12C6718F0000A7033 /* MPMusicCacheManager.m in Sources */,
 				46572CA32C66161000EC61CD /* MPMusicPlayer.m in Sources */,
 				46F909C62C8ED30A00A04F62 /* D9ReportAlert.m in Sources */,
+				46C2761C2C9E74BF005FF6AA /* ColorExtension.swift in Sources */,
 				46F909C92C8ED30A00A04F62 /* UITextView+Link.m in Sources */,
 				463CC1542C6DEF2000993ABB /* MPPlayListEditViewController.m in Sources */,
 				4647F16D2C64EAFA002CCBE3 /* SceneDelegate.m in Sources */,

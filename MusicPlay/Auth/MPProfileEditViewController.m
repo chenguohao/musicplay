@@ -142,12 +142,37 @@
 
 
 - (void)onBack{
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    if(self.isAvatarUpdate || self.nameInput.text != self.originProfile.name){
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Unsaved Changes"
+                                                                                 message:@"Are you sure you want to exit without saving?"
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Confirm"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction * _Nonnull action) {}];
+        [alertController addAction:okAction];
+        [alertController addAction:cancelAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+    
 }
 
 - (void)onSave{
     
     NSString* newName = self.nameInput.text;
+    if(newName.length < 1){
+        [DNEHUD showMessage:@"UserName Cannot be empty"];
+        return;
+    }
+    
     __block  NSString* newurl = self.originProfile.avatar;
     __weak typeof(self) wkself = self;
     void (^onUpdate)(void) = ^(){
