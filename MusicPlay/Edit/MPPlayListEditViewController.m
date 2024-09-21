@@ -68,7 +68,7 @@ self.modelSnapshot = self.model.copy;
 }
 
 - (void)setupUI {
-    self.view.backgroundColor = UIColor.whiteColor;
+    self.view.backgroundColor = MPUITheme.theme_white;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(4, 0, 40, 40);
@@ -88,7 +88,7 @@ self.modelSnapshot = self.model.copy;
     
     // Header View
     self.headerView = [[UIView alloc] init];
-    self.headerView.backgroundColor = [UIColor whiteColor];
+    self.headerView.backgroundColor = MPUITheme.theme_white;
     [self.view addSubview:self.headerView];
     
     // Add Header Subviews (e.g., imageView, labels, etc.)
@@ -161,6 +161,7 @@ self.modelSnapshot = self.model.copy;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.editing = YES;
+    self.tableView.backgroundColor = MPUITheme.theme_white;
     [self.view addSubview:self.tableView];
     
     // Add Song Button

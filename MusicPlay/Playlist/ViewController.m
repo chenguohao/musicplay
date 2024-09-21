@@ -49,6 +49,7 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = MPUITheme.theme_white;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     [self.tableView registerClass:[MPPlayDetailListCell class] forCellReuseIdentifier:@"CardCell"];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -260,7 +261,7 @@
     NSDictionary* info = playlist[indexPath.row];
     [cell configureWithInfo:info];
     [cell setBgColor2: indexPath.section % 2 == 0?MPUITheme.contentBg:MPUITheme.contentBg_semi];
-       
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
