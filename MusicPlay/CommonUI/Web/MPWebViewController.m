@@ -49,6 +49,12 @@
 }
 
 - (void)onBack{
-    [self dismissModalViewControllerAnimated:YES];
+    if (self.presentingViewController) {
+            // 如果是通过 present 的方式展示出来的，就 dismiss
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            // 否则，进行 pop navigation
+            [self.navigationController popViewControllerAnimated:YES];
+        }
 }
 @end
