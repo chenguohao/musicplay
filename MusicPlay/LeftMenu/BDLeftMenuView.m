@@ -16,6 +16,8 @@
 #import "MPUserProfile.h"
 #import "MPAboutViewController.h"
 #import "MPProfileEditViewController.h"
+#import "MPWebViewController.h"
+#import "D9UserAgreementAlert.h"
 #define UIScreenBounds          [UIScreen mainScreen].bounds
 #define BDLeftMenuViewMaxWidth  UIScreenBounds.size.width * 0.70  // 左侧白色菜单的宽度
 #define AnimationDuration       0.25
@@ -420,7 +422,13 @@ static BDLeftMenuView *_leftMenuView = nil;
     cell.textLabel.text = dict[@"title"];
     cell.textLabel.font = [MPUITheme font_normal:18];
     cell.textLabel.textColor = MPUITheme.contentBg;
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor colorWithHexString:@"95d5b2"];
+    
+    // 设置点击时的背景色
+        UIView *selectedBackgroundView = [[UIView alloc] init];
+    selectedBackgroundView.backgroundColor = [UIColor colorWithHexString:@"40916c"]; // 点击时变为深灰色
+        cell.selectedBackgroundView = selectedBackgroundView;
     return cell;
 }
 
@@ -440,10 +448,10 @@ static BDLeftMenuView *_leftMenuView = nil;
         [self didCloseLeftMenu];
         switch (indexPath.row) {
             case 0:
-                 
+                [self onUserAgreement];
                 break;
             case 1:
-                 
+                [self onPrivacy];
                 break;
             case 2:
                 [self onAbout];
@@ -462,6 +470,22 @@ static BDLeftMenuView *_leftMenuView = nil;
 }
 
 #pragma mark - Function
+
+- (void)onUserAgreement{
+    MPWebViewController *webVC = [[MPWebViewController alloc] initWithURL:[D9UserAgreementAlert termsUrl]];
+    webVC.title = @"User Agreement";
+    if(self.onPushBlock){
+        self.onPushBlock(webVC);
+    }
+}
+
+- (void)onPrivacy{
+    MPWebViewController *webVC = [[MPWebViewController alloc] initWithURL:[D9UserAgreementAlert privacyUrl]];
+    webVC.title = @"Privacy Policy";
+    if(self.onPushBlock){
+        self.onPushBlock(webVC);
+    }
+}
 
 - (void)onAbout{
     MPAboutViewController* aboutVC = [MPAboutViewController new];
