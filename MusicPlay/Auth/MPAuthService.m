@@ -86,11 +86,12 @@
 
 - (void)requestLogin:(NSDictionary*)params{
 
+    [DNEHUD showLoading:@""];
     [[MPNetworkManager sharedManager] postRequestPath:@"/v1/appleSign"
                                                Params:params
                                            Completion:^(id responseObject, NSError * err) {
         NSLog(@"Response: %@", responseObject);
-        
+        [DNEHUD hideHUD];
         if(err){
             if(self.onResultBlock){
                 self.onResultBlock(err);
