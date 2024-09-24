@@ -294,6 +294,12 @@
     
     
     [view setLikeAvtion:^(BOOL isLike) {
+        
+        if(!IsUserLogin){
+            [[MPUIManager sharedManager] showLogin];
+            return;
+        }
+        
         [self.service likePlayList:isLike PlaylistID:contentID Result:^(NSError * err) {
             if (err) {
                 [DNEHUD showMessage:err.description];

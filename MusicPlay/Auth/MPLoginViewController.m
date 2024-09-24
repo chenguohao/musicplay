@@ -72,7 +72,7 @@
 - (void)loginButtonTapped:(UIButton *)sender {
     [self.service loginWithAppleWithComplete:^(NSError * err) {
         if(err){
-            
+            [DNEHUD showMessage:err.description];
         }else{
             [self dismissModalViewControllerAnimated:YES];
         }

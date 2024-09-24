@@ -71,7 +71,7 @@
           PlaylistID:(int)playlistID
               Result:(void(^)(NSError*))result{
     NSMutableDictionary* mdic = [NSMutableDictionary new];
-    [mdic setObject:@(islike) forKey:@"islike"];
+    [mdic setObject:@(islike) forKey:@"is_like"];
     [mdic setObject:@(playlistID) forKey:@"target_id"];
     [[MPNetworkManager sharedManager] postRequestPath:@"/v1/like"
                                                Params:mdic

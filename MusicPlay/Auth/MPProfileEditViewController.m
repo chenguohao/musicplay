@@ -180,7 +180,8 @@
         user.name = newName;
         user.avatar = newurl;
         [[MPProfileManager sharedManager] cacheUserProfile:user];
-        [wkself onBack];
+      
+        [wkself.navigationController popViewControllerAnimated:YES];
     };
     
     if(self.isAvatarUpdate){
